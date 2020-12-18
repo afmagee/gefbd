@@ -2,7 +2,7 @@
 All data comes from Wilberg et al. (2019).
 
 ## Running a single analysis
-To set up an analysis, use the [`analysis.Rev`](empirical_analysis/src/analysis.Rev) file. This is designed to be called (from within `empirical_analyses/`, all filepaths here are relative to this) with 5 arguments,
+To set up an analysis, use the [`analysis.Rev`](src/analysis.Rev) file. This is designed to be called (from within `empirical_analyses/`, all filepaths here are relative to this) with 5 arguments,
 `<path/to/rb> analysis.Rev <treefile> <BDP_prior> <hyperprior_file> <ME_hyperprior> <seed>`
 The arguments are,
 - `<treefile>` the name of the treefile, must be nested within `data/`
@@ -24,7 +24,7 @@ Other important information is hard-coded into the file and various files called
 
 ## File structure
 
-### [data](empirical_analysis/data)
+### [data](data)
 Most importantly, contains 6 trees from Wilberg (2019), a taxon data file.
 Also contains hyperparameters for HSMRFBDP analyses in text files.
 These are gamma distributions fit to the posterior distributions from constant-rate analyses of all 6 trees.
@@ -32,21 +32,21 @@ These are gamma distributions fit to the posterior distributions from constant-r
 ### output
 Where all runs will place log files.
 
-### [src](empirical_analysis/src)
+### [src](src)
 Contains scripts for running and post-processing analyses.
 
 Rev scripts (for analyses):
-- [Analysis.Rev](empirical_analysis/src/Analysis.Rev): Analysis stub file. See above for details.
-- [Analysis.Rev](empirical_analysis/src/Analysis.Rev): Analysis stub file. See above for details.
-- [CRBDP.Rev](empirical_analysis/src/CRBDP.Rev): Called by analysis stub file for constant-rate analyses.
-- [HSMRFBDP.Rev](empirical_analysis/src/HSMRFBDP.Rev): Called by analysis stub file for analyses with time-varying rates.
-- [ME.Rev](empirical_analysis/src/ME.Rev): Called by analysis stub file for analyses with mass extinctions.
+- [Analysis.Rev](src/Analysis.Rev): Analysis stub file. See above for details.
+- [Analysis.Rev](src/Analysis.Rev): Analysis stub file. See above for details.
+- [CRBDP.Rev](src/CRBDP.Rev): Called by analysis stub file for constant-rate analyses.
+- [HSMRFBDP.Rev](src/HSMRFBDP.Rev): Called by analysis stub file for analyses with time-varying rates.
+- [ME.Rev](src/ME.Rev): Called by analysis stub file for analyses with mass extinctions.
 
 
 R scripts (for post-processing):
-- [find_converged_cliques.R](empirical_analysis/src/find_converged_cliques.R): Finds the set of MCMC chains which have all converged to the same distribution. Uses PSRF to assess inter-chain convergence. Run with `Rscript` (details of arguments in file). Puts runs that did not converge into output/unconverged.
-- [summarize_empirical_results.R](empirical_analysis/src/summarize_empirical_results.R): Log files are large. This summarizes (jointly) all log files for a given analysis run. To be run with `Rscript` *after* filtering for convergence.
-- [posteriors2gammaPriors.R](empirical_analysis/src/posteriors2gammaPriors.R): Fits gamma distributions to posterior samples. Allows inflation of variance.
-- [find_converged_cliques_utils.R](empirical_analysis/src/find_converged_cliques_utils.R): Implements the functions used in `find_converged_cliques.R`
-- [rank_based_convergence_diagnostics.R](empirical_analysis/src/rank_based_convergence_diagnostics.R): Implementations of Vehtari et al. (2020) rank-based convergence diagnostics.
-- [CRBDP_convergence_diagnostics.R](empirical_analysis/src/CRBDP_convergence_diagnostics.R): Basic checking of convergence for constant-rate analyses.
+- [find_converged_cliques.R](src/find_converged_cliques.R): Finds the set of MCMC chains which have all converged to the same distribution. Uses PSRF to assess inter-chain convergence. Run with `Rscript` (details of arguments in file). Puts runs that did not converge into output/unconverged.
+- [summarize_empirical_results.R](src/summarize_empirical_results.R): Log files are large. This summarizes (jointly) all log files for a given analysis run. To be run with `Rscript` *after* filtering for convergence.
+- [posteriors2gammaPriors.R](src/posteriors2gammaPriors.R): Fits gamma distributions to posterior samples. Allows inflation of variance.
+- [find_converged_cliques_utils.R](src/find_converged_cliques_utils.R): Implements the functions used in `find_converged_cliques.R`
+- [rank_based_convergence_diagnostics.R](src/rank_based_convergence_diagnostics.R): Implementations of Vehtari et al. (2020) rank-based convergence diagnostics.
+- [CRBDP_convergence_diagnostics.R](src/CRBDP_convergence_diagnostics.R): Basic checking of convergence for constant-rate analyses.
