@@ -1,0 +1,112 @@
+##########
+# Analysis options
+##########
+
+# Specify tree file
+TREE_FILE = args[1]
+
+# Prior on BDPSTP
+BDP_PRIOR = args[2]
+
+# Hyperpriors (for time-varying models)
+BDP_HYPERPRIOR = args[3]
+
+# Should we estimate mass extinctions?
+NUM_EXPECTED_ME = args[4]
+
+# Number of MCMC replicates
+NUM_REPS = args[5]
+
+# For reproducibility
+SEED = args[6]
+
+seed(SEED)
+
+# Specify taxon file
+TAXON_FILE = "crocs_taxa.txt"
+
+# What should we condition the tree on?
+CONDITION = "time"
+
+# set number of speciation_rate regimes (only used for MRF models)
+NUM_INTERVALS = 100
+
+# number of breaks between regimes, for convenience (only used for MRF models)
+NUM_BREAKS = NUM_INTERVALS - 1
+
+# Controls overall smoothness, if NUM_INTERVALS is changed, this should be changed
+global_scale_hyperprior <- 0.0021
+
+##########
+# Constant parameters
+##########
+
+sampling_at_present <- 14/20
+
+treatement_probability <- 0
+
+expected_number_of_mass_extinctions <- NUM_EXPECTED_ME
+
+##########
+# Get data
+##########
+psi <- readTrees("data/" + TREE_FILE)[1]
+
+taxa <- readTaxonData("data/" + TAXON_FILE,delim=TAB)
+
+# Get some useful variables from the data. We need these later on.
+num_species <- psi.ntips()
+root_height <- psi.rootAge()
+
+mvi = 0
+
+##########
+# Mass extinction model
+##########
+# ME model will fill Mu with 0 if we do not want to infer mass extinctions
+# This only works for time-varying tree priors, otherwise we simply never declare Mu
+if (BDP_PRIOR != "CRBDP") {
+  source("../empirical_analysis/src/ME.Rev")
+}
+
+ME_PREFIX = "_ME_prior_" + NUM_EXPECTED_ME
+
+##########
+# Tree model
+##########
+source("src/" + BDP_PRIOR + ".Rev")
+
+### clamp the model with the "observed" tree
+timetree.clamp(psi)
+
+##########
+# The model DAG
+##########
+
+### workspace model wrapper ###
+mymodel = model(sampling_at_present)
+
+##########
+# The monitors
+##########
+
+### set up the monitors that will output parameter values to file and screen
+monitors[1] = mnModel(filename="output/" + BDP_PRIOR + ME_PREFIX + "_" + TREE_FILE + ".log",printgen=10, separator = TAB)
+monitors[2] = mnScreen(printgen=1000)
+
+##########
+# Run MCMC
+##########
+
+### workspace mcmc ###
+mymcmc = mcmc(mymodel, monitors, moves, nruns=NUM_REPS)
+
+### Use burnin to tune the MH proposals ###
+mymcmc.burnin(generations=25000,tuningInterval=500)
+mymcmc.operatorSummary()
+
+### run the MCMC ###
+mymcmc.run(generations=250000)
+
+
+q()

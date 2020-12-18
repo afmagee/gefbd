@@ -1,0 +1,51 @@
+### Information for all trees
+
+condition <- "root"
+age <- 243.5
+sampling_fraction <- 14/20
+
+# set number of diversification regimes
+NUM_INTERVALS = 100
+
+NUM_BREAKS = NUM_INTERVALS - 1
+
+# Chop up duration from root to present into equally sized intervals
+timeline_fracs <- seq(0, NUM_BREAKS, 1)/NUM_INTERVALS
+timeline <- abs(age * timeline_fracs)
+
+### command-line arguments
+INPUT_PATH = args[1]
+OUTPUT_PATH = args[2]
+INDEX = args[3]
+SEED = args[4]
+
+seed(SEED)
+
+if ( fileExists( file=OUTPUT_PATH + INDEX + ".tre" ) ) q()
+
+source(INPUT_PATH + "/" + INDEX + ".txt")
+
+### simulate
+write("",file=OUTPUT_PATH + INDEX + "_tree_sizes.txt",append=FALSE)
+found <- FALSE
+while ( found == FALSE ) {
+
+   tree <- simForwardBirthDeath(timeline=timeline,
+                                lambda=speciation_rate,
+                                mu=extinction_rate,
+                                phi=fossilization_rate,
+                                r=1.0,
+                                Phi=sampling_fraction,
+                                Mu=mass_extinction_probabilities,
+                                condition=condition,
+                                time=age,
+                                maxNumLineages=25000)
+   n_tips <- tree.ntips()
+   write(n_tips,"\n",file=OUTPUT_PATH + INDEX + "_tree_sizes.txt",append=TRUE)
+   print(n_tips)
+   found <- n_tips < 2500 && n_tips > 50
+}
+
+write(tree,file=OUTPUT_PATH + INDEX + ".tre")
+
+q()

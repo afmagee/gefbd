@@ -1,0 +1,7 @@
+
+ speciation_rate_hyperprior_alpha <- 8.99081507514433
+ speciation_rate_hyperprior_beta <- 26.8092094488702
+ extinction_rate_hyperprior_alpha <- 8.9273291557384
+ extinction_rate_hyperprior_beta <- 26.6713970313587
+ fossilization_rate_hyperprior_alpha <- 9.15036897630802
+ fossilization_rate_hyperprior_beta <- 2577.69614869345

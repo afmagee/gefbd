@@ -1,0 +1,35 @@
+##########
+# Priors
+##########
+
+speciation_rate ~ dnHalfCauchy(0.0,0.1)
+moves[++mvi] = mvScaleBactrian(speciation_rate,weight=7.5)
+moves[++mvi] = mvRandomDive(speciation_rate,weight=2.5)
+
+extinction_rate ~ dnHalfCauchy(0.0,0.1)
+moves[++mvi] = mvScaleBactrian(extinction_rate,weight=7.5)
+moves[++mvi] = mvRandomDive(extinction_rate,weight=2.5)
+
+fossilization_rate ~ dnHalfCauchy(0.0,0.1)
+moves[++mvi] = mvScaleBactrian(fossilization_rate,weight=7.5)
+moves[++mvi] = mvRandomDive(fossilization_rate,weight=2.5)
+
+joint_move = mvAVMVN(weight=10.0)
+joint_move.addVariable(speciation_rate)
+joint_move.addVariable(extinction_rate)
+joint_move.addVariable(fossilization_rate)
+moves[++mvi] = joint_move
+
+##########
+# Assemble the tree model
+##########
+
+timetree ~ dnBDSTP(
+                    rootAge                                          = root_height,
+                    lambda                                           = speciation_rate,
+                    mu                                               = extinction_rate,
+                    phi                                              = fossilization_rate,
+                    Phi                                              = sampling_at_present,
+                    r                                                = 0.0,
+                    condition                                        = CONDITION,
+                    taxa                                             = taxa)

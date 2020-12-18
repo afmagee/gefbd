@@ -1,0 +1,174 @@
+##########
+# Setup and hyperpriors
+##########
+
+# Chop up duration from root to present into equally sized intervals
+interval_times <- abs(root_height * seq(1, NUM_BREAKS, 1)/NUM_INTERVALS)
+
+# empirical Bayes hyperpriors for speciation_rate, extinction_rate, and sampling at present
+source("data/" + BDP_HYPERPRIOR)
+
+######################
+# rates through time #
+######################
+
+
+speciation_rate_at_present ~ dnGamma(speciation_rate_hyperprior_alpha,speciation_rate_hyperprior_beta)
+extinction_rate_at_present ~ dnGamma(extinction_rate_hyperprior_alpha,extinction_rate_hyperprior_beta)
+fossilization_rate_at_present ~ dnGamma(fossilization_rate_hyperprior_alpha,fossilization_rate_hyperprior_beta)
+
+avmvn_rates_at_present = mvAVMVN(weight=50)
+avmvn_rates_at_present.addVariable(speciation_rate_at_present)
+avmvn_rates_at_present.addVariable(extinction_rate_at_present)
+avmvn_rates_at_present.addVariable(fossilization_rate_at_present)
+moves[++mvi] = avmvn_rates_at_present
+
+up_down_move = mvUpDownScale(weight=5.0)
+up_down_move.addVariable(speciation_rate_at_present,TRUE)
+up_down_move.addVariable(extinction_rate_at_present,TRUE)
+moves[++mvi] = up_down_move
+
+moves[++mvi] = mvScaleBactrian(speciation_rate_at_present,weight=5)
+moves[++mvi] = mvScaleBactrian(extinction_rate_at_present,weight=5)
+moves[++mvi] = mvScaleBactrian(fossilization_rate_at_present,weight=5)
+moves[++mvi] = mvMirrorMultiplier(speciation_rate_at_present,weight=5)
+moves[++mvi] = mvMirrorMultiplier(extinction_rate_at_present,weight=5)
+moves[++mvi] = mvMirrorMultiplier(fossilization_rate_at_present,weight=5)
+moves[++mvi] = mvRandomDive(speciation_rate_at_present,weight=5)
+moves[++mvi] = mvRandomDive(extinction_rate_at_present,weight=5)
+moves[++mvi] = mvRandomDive(fossilization_rate_at_present,weight=5)
+
+
+## Global shrinkage parameter
+speciation_rate_global_scale_hyperprior     <- 0.0021
+extinction_rate_global_scale_hyperprior     <- 0.0021
+fossilization_rate_global_scale_hyperprior  <- 0.0021
+
+speciation_rate_global_scale ~ dnHalfCauchy(0,1)
+extinction_rate_global_scale ~ dnHalfCauchy(0,1)
+fossilization_rate_global_scale ~ dnHalfCauchy(0,1)
+
+speciation_rate_global_scale.setValue(runif(1,0.005,0.1)[1])
+extinction_rate_global_scale.setValue(runif(1,0.005,0.1)[1])
+fossilization_rate_global_scale.setValue(runif(1,0.005,0.1)[1])
+
+moves[++mvi] = mvScaleBactrian(speciation_rate_global_scale,weight=5.0)
+moves[++mvi] = mvScaleBactrian(extinction_rate_global_scale,weight=5.0)
+moves[++mvi] = mvScaleBactrian(fossilization_rate_global_scale,weight=5.0)
+
+for (i in 1:(NUM_INTERVALS-1)) {
+
+  # Variable-scaled variances for hierarchical horseshoe
+  sigma_speciation_rate[i] ~ dnHalfCauchy(0,1)
+  sigma_extinction_rate[i] ~ dnHalfCauchy(0,1)
+  sigma_fossilization_rate[i] ~ dnHalfCauchy(0,1)
+
+  # Make sure values initialize to something reasonable
+  sigma_speciation_rate[i].setValue(runif(1,0.005,0.1)[1])
+  sigma_extinction_rate[i].setValue(runif(1,0.005,0.1)[1])
+  sigma_fossilization_rate[i].setValue(runif(1,0.005,0.1)[1])
+
+  # moves on the single sigma values
+  moves[++mvi] = mvScaleBactrian(sigma_speciation_rate[i], weight=5)
+  moves[++mvi] = mvScaleBactrian(sigma_extinction_rate[i], weight=5)
+  moves[++mvi] = mvScaleBactrian(sigma_fossilization_rate[i], weight=5)
+
+  # non-centralized parameterization of horseshoe
+  delta_log_speciation_rate[i] ~ dnNormal( mean=0, sd=sigma_speciation_rate[i]*speciation_rate_global_scale*speciation_rate_global_scale_hyperprior )
+  delta_log_extinction_rate[i] ~ dnNormal( mean=0, sd=sigma_extinction_rate[i]*extinction_rate_global_scale*extinction_rate_global_scale_hyperprior )
+  delta_log_fossilization_rate[i] ~ dnNormal( mean=0, sd=sigma_fossilization_rate[i]*fossilization_rate_global_scale*fossilization_rate_global_scale_hyperprior )
+
+  # Make sure values initialize to something reasonable
+  delta_log_speciation_rate[i].setValue(runif(1,-0.1,0.1)[1])
+  delta_log_extinction_rate[i].setValue(runif(1,-0.1,0.1)[1])
+  delta_log_fossilization_rate[i].setValue(runif(1,-0.1,0.1)[1])
+
+  moves[++mvi] = mvSlideBactrian(delta_log_speciation_rate[i], weight=5)
+  moves[++mvi] = mvSlideBactrian(delta_log_extinction_rate[i], weight=5)
+  moves[++mvi] = mvSlideBactrian(delta_log_fossilization_rate[i], weight=5)
+
+  delta_up_down_move[i] = mvUpDownSlide(weight=5.0)
+  delta_up_down_move[i].addVariable(delta_log_speciation_rate[i],TRUE)
+  delta_up_down_move[i].addVariable(delta_log_extinction_rate[i],TRUE)
+  moves[++mvi] = delta_up_down_move[i]
+
+}
+
+# Assemble first-order differences and speciation_rate at present into the random field
+speciation_rate := fnassembleContinuousMRF(speciation_rate_at_present,delta_log_speciation_rate,initialValueIsLogScale=FALSE,order=1)
+extinction_rate := fnassembleContinuousMRF(extinction_rate_at_present,delta_log_extinction_rate,initialValueIsLogScale=FALSE,order=1)
+fossilization_rate := fnassembleContinuousMRF(fossilization_rate_at_present,delta_log_fossilization_rate,initialValueIsLogScale=FALSE,order=1)
+
+# Move all field parameters in one go
+moves[++mvi] = mvEllipticalSliceSamplingSimple(delta_log_speciation_rate,weight=5,tune=FALSE)
+moves[++mvi] = mvEllipticalSliceSamplingSimple(delta_log_extinction_rate,weight=5,tune=FALSE)
+moves[++mvi] = mvEllipticalSliceSamplingSimple(delta_log_fossilization_rate,weight=5,tune=FALSE)
+
+# Move all field hyperparameters in one go
+moves[++mvi] = mvHSRFHyperpriorsGibbs(speciation_rate_global_scale, sigma_speciation_rate, delta_log_speciation_rate, speciation_rate_global_scale_hyperprior, propGlobalOnly=0.75, weight=20)
+moves[++mvi] = mvHSRFHyperpriorsGibbs(extinction_rate_global_scale, sigma_extinction_rate, delta_log_extinction_rate, extinction_rate_global_scale_hyperprior, propGlobalOnly=0.75, weight=20)
+moves[++mvi] = mvHSRFHyperpriorsGibbs(fossilization_rate_global_scale, sigma_fossilization_rate, delta_log_fossilization_rate, fossilization_rate_global_scale_hyperprior, propGlobalOnly=0.75, weight=20)
+
+# Swap moves to exchange adjacent delta,sigma pairs
+moves[++mvi] = mvHSRFIntervalSwap(delta_log_speciation_rate,sigma_speciation_rate,weight=5)
+moves[++mvi] = mvHSRFIntervalSwap(delta_log_extinction_rate,sigma_extinction_rate,weight=5)
+moves[++mvi] = mvHSRFIntervalSwap(delta_log_fossilization_rate,sigma_fossilization_rate,weight=5)
+
+# joint sliding moves of all vector elements
+moves[++mvi] = mvVectorSlide(delta_log_speciation_rate, weight=10)
+moves[++mvi] = mvVectorSlide(delta_log_extinction_rate, weight=10)
+moves[++mvi] = mvVectorSlide(delta_log_fossilization_rate, weight=10)
+
+# up-down slide of the entire vector and the rate at present
+rates_up_down_move = mvUpDownScale(weight=10.0)
+rates_up_down_move.addVariable(speciation_rate_at_present,FALSE)
+rates_up_down_move.addVariable(extinction_rate_at_present,FALSE)
+rates_up_down_move.addVariable(delta_log_speciation_rate,TRUE)
+rates_up_down_move.addVariable(delta_log_extinction_rate,TRUE)
+moves[++mvi] = rates_up_down_move
+
+# shrink expand moves
+moves[++mvi] = mvShrinkExpand( delta_log_speciation_rate, sd=speciation_rate_global_scale, weight=10 )
+moves[++mvi] = mvShrinkExpand( delta_log_extinction_rate, sd=extinction_rate_global_scale, weight=10 )
+moves[++mvi] = mvShrinkExpand( delta_log_fossilization_rate, sd=fossilization_rate_global_scale, weight=10 )
+
+
+
+
+
+
+##########
+# treatment
+##########
+#treatment <- 0.0
+
+##########
+# Assemble the tree model
+##########
+
+if ( NUM_EXPECTED_ME == 0 ) {
+  timetree ~ dnBDSTP(
+                    rootAge                                          = root_height,
+                    timeline                                         = interval_times,
+                    lambda                                           = speciation_rate,
+                    mu                                               = extinction_rate,
+                    phi                                              = fossilization_rate,
+                    r                                                = treatment,
+                    Phi                                              = sampling_at_present,
+                    condition                                        = CONDITION,
+                    taxa                                             = taxa,
+                    initialTree                                      = psi)
+} else {
+  timetree ~ dnBDSTP(
+                    rootAge                                          = root_height,
+                    timeline                                         = interval_times,
+                    lambda                                           = speciation_rate,
+                    mu                                               = extinction_rate,
+                    Mu                                               = mass_extinction_probabilities,
+                    phi                                              = fossilization_rate,
+                    r                                                = treatment,
+                    Phi                                              = sampling_at_present,
+                    condition                                        = CONDITION,
+                    taxa                                             = taxa,
+                    initialTree                                      = psi)
+}

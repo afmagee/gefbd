@@ -1,0 +1,41 @@
+rb src/analysis.Rev --args calsoy_as_gonio.equal.tre HSMRFBDP calsoy_as_gonio.equal.tre.priors.txt 0.0 1234 > output_tmp/cag.0.0.out.txt
+rb src/analysis.Rev --args gavia_molecular.equal.tre HSMRFBDP gavia_molecular.equal.tre.priors.txt 0.0 1234 > output_tmp/gm.0.0.out.txt
+rb src/analysis.Rev --args gavia_mol_minus_thoracosaurs.equal.tre HSMRFBDP gavia_mol_minus_thoracosaurs.equal.tre.priors.txt 0.0 1234 > output_tmp/gmmt.0.0.out.txt
+rb src/analysis.Rev --args stolokro_as_basal_neo.equal.tre HSMRFBDP stolokro_as_basal_neo.equal.tre.priors.txt 0.0 1234 > output_tmp/sabn.0.0.out.txt
+rb src/analysis.Rev --args thalatto_as_basal_crocodyliformes.equal.tre HSMRFBDP thalatto_as_basal_crocodyliformes.equal.tre.priors.txt 0.0 1234 > output_tmp/tabc.0.0.out.txt
+rb src/analysis.Rev --args thalatto_in_longirostrine_clade.equal.tre HSMRFBDP thalatto_in_longirostrine_clade.equal.tre.priors.txt 0.0 1234 > output_tmp/tilc.0.0.out.txt
+
+rb src/analysis.Rev --args calsoy_as_gonio.equal.tre HSMRFBDP calsoy_as_gonio.equal.tre.priors.txt 0.1 1234 > output_tmp/cag.0.1.out.txt
+rb src/analysis.Rev --args gavia_molecular.equal.tre HSMRFBDP gavia_molecular.equal.tre.priors.txt 0.1 1234 > output_tmp/gm.0.1.out.txt
+rb src/analysis.Rev --args gavia_mol_minus_thoracosaurs.equal.tre HSMRFBDP gavia_mol_minus_thoracosaurs.equal.tre.priors.txt 0.1 1234 > output_tmp/gmmt.0.1.out.txt
+rb src/analysis.Rev --args stolokro_as_basal_neo.equal.tre HSMRFBDP stolokro_as_basal_neo.equal.tre.priors.txt 0.1 1234 > output_tmp/sabn.0.1.out.txt
+rb src/analysis.Rev --args thalatto_as_basal_crocodyliformes.equal.tre HSMRFBDP thalatto_as_basal_crocodyliformes.equal.tre.priors.txt 0.1 1234 > output_tmp/tabc.0.1.out.txt
+rb src/analysis.Rev --args thalatto_in_longirostrine_clade.equal.tre HSMRFBDP thalatto_in_longirostrine_clade.equal.tre.priors.txt 0.1 1234 > output_tmp/tilc.0.1.out.txt
+
+rb src/analysis.Rev --args calsoy_as_gonio.equal.tre HSMRFBDP calsoy_as_gonio.equal.tre.priors.txt 0.5 1234 > output_tmp/cag.0.5.out.txt
+rb src/analysis.Rev --args gavia_molecular.equal.tre HSMRFBDP gavia_molecular.equal.tre.priors.txt 0.5 1234 > output_tmp/gm.0.5.out.txt
+rb src/analysis.Rev --args gavia_mol_minus_thoracosaurs.equal.tre HSMRFBDP gavia_mol_minus_thoracosaurs.equal.tre.priors.txt 0.5 1234 > output_tmp/gmmt.0.5.out.txt
+rb src/analysis.Rev --args stolokro_as_basal_neo.equal.tre HSMRFBDP stolokro_as_basal_neo.equal.tre.priors.txt 0.5 1234 > output_tmp/sabn.0.5.out.txt
+rb src/analysis.Rev --args thalatto_as_basal_crocodyliformes.equal.tre HSMRFBDP thalatto_as_basal_crocodyliformes.equal.tre.priors.txt 0.5 1234 > output_tmp/tabc.0.5.out.txt
+rb src/analysis.Rev --args thalatto_in_longirostrine_clade.equal.tre HSMRFBDP thalatto_in_longirostrine_clade.equal.tre.priors.txt 0.5 1234 > output_tmp/tilc.0.5.out.txt
+
+rb src/analysis.Rev --args calsoy_as_gonio.equal.tre HSMRFBDP calsoy_as_gonio.equal.tre.priors.txt 1.0 1234 > output_tmp/cag.1.0.out.txt
+rb src/analysis.Rev --args gavia_molecular.equal.tre HSMRFBDP gavia_molecular.equal.tre.priors.txt 1.0 1234 > output_tmp/gm.1.0.out.txt
+rb src/analysis.Rev --args gavia_mol_minus_thoracosaurs.equal.tre HSMRFBDP gavia_mol_minus_thoracosaurs.equal.tre.priors.txt 1.0 1234 > output_tmp/gmmt.1.0.out.txt
+rb src/analysis.Rev --args stolokro_as_basal_neo.equal.tre HSMRFBDP stolokro_as_basal_neo.equal.tre.priors.txt 1.0 1234 > output_tmp/sabn.1.0.out.txt
+rb src/analysis.Rev --args thalatto_as_basal_crocodyliformes.equal.tre HSMRFBDP thalatto_as_basal_crocodyliformes.equal.tre.priors.txt 1.0 1234 > output_tmp/tabc.1.0.out.txt
+rb src/analysis.Rev --args thalatto_in_longirostrine_clade.equal.tre HSMRFBDP thalatto_in_longirostrine_clade.equal.tre.priors.txt 1.0 1234 > output_tmp/tilc.1.0.out.txt
+
+rb src/analysis.Rev --args calsoy_as_gonio.equal.tre HSMRFBDP calsoy_as_gonio.equal.tre.priors.txt 2.0 1234 > output_tmp/cag.2.0.out.txt
+rb src/analysis.Rev --args gavia_molecular.equal.tre HSMRFBDP gavia_molecular.equal.tre.priors.txt 2.0 1234 > output_tmp/gm.2.0.out.txt
+rb src/analysis.Rev --args gavia_mol_minus_thoracosaurs.equal.tre HSMRFBDP gavia_mol_minus_thoracosaurs.equal.tre.priors.txt 2.0 1234 > output_tmp/gmmt.2.0.out.txt
+rb src/analysis.Rev --args stolokro_as_basal_neo.equal.tre HSMRFBDP stolokro_as_basal_neo.equal.tre.priors.txt 2.0 1234 > output_tmp/sabn.2.0.out.txt
+rb src/analysis.Rev --args thalatto_as_basal_crocodyliformes.equal.tre HSMRFBDP thalatto_as_basal_crocodyliformes.equal.tre.priors.txt 2.0 1234 > output_tmp/tabc.2.0.out.txt
+rb src/analysis.Rev --args thalatto_in_longirostrine_clade.equal.tre HSMRFBDP thalatto_in_longirostrine_clade.equal.tre.priors.txt 2.0 1234 > output_tmp/tilc.2.0.out.txt
+
+rb src/analysis.Rev --args calsoy_as_gonio.equal.tre HSMRFBDP calsoy_as_gonio.equal.tre.priors.txt 5.0 1234 > output_tmp/cag.5.0.out.txt
+rb src/analysis.Rev --args gavia_molecular.equal.tre HSMRFBDP gavia_molecular.equal.tre.priors.txt 5.0 1234 > output_tmp/gm.5.0.out.txt
+rb src/analysis.Rev --args gavia_mol_minus_thoracosaurs.equal.tre HSMRFBDP gavia_mol_minus_thoracosaurs.equal.tre.priors.txt 5.0 1234 > output_tmp/gmmt.5.0.out.txt
+rb src/analysis.Rev --args stolokro_as_basal_neo.equal.tre HSMRFBDP stolokro_as_basal_neo.equal.tre.priors.txt 5.0 1234 > output_tmp/sabn.5.0.out.txt
+rb src/analysis.Rev --args thalatto_as_basal_crocodyliformes.equal.tre HSMRFBDP thalatto_as_basal_crocodyliformes.equal.tre.priors.txt 5.0 1234 > output_tmp/tabc.5.0.out.txt
+rb src/analysis.Rev --args thalatto_in_longirostrine_clade.equal.tre HSMRFBDP thalatto_in_longirostrine_clade.equal.tre.priors.txt 5.0 1234 > output_tmp/tilc.5.0.out.txt
