@@ -4,7 +4,7 @@
 
 # Call this script from phyload/simulation_study
 
-# This prints several 
+# This prints several
 
 # Get arguments
 args = commandArgs(trailingOnly=TRUE)
@@ -16,10 +16,10 @@ if (!length(args) == 2) {
 gammaMoments2Params <- function(m,variance) {
   b <- m/variance
   a <- m * b
-  
+
   res <- c(a,b)
   names(res) <- c("alpha","beta")
-  
+
   return(res)
 }
 
@@ -35,25 +35,24 @@ getConcatenatedLogFile <- function(rb.file.prefix) {
 
 getRevGammaPrior <- function(rb.posterior,parameter.names,variance.inflation.factor=2.0) {
   outstring <- ""
-  
+
   for (i in 1:length(parameter.names)) {
     key <- paste0("^",parameter.names[i],"$")
     x <- rb.posterior[,grepl(key,names(rb.posterior))]
 
     m <- mean(x)
     v <- var(x) * variance.inflation.factor
-  
+
     alphabeta <- gammaMoments2Params(m,v)
-    
+
     outstring <- c(outstring,paste0(parameter.names[i],"_hyperprior_alpha <- ",alphabeta[1]))
     outstring <- c(outstring,paste0(parameter.names[i],"_hyperprior_beta <- ",alphabeta[2]))
   }
-  
+
   return(paste0(outstring,sep="\n"))
-  
+
 }
 
 rb.log <- getConcatenatedLogFile(args[1])
-priors.string <- getRevGammaPrior(rb.log,c("speciation_rate","extinction_rate","sampling_rate"))
+priors.string <- getRevGammaPrior(rb.log,c("speciation_rate","extinction_rate","fossilization_rate"))
 cat(priors.string,file=args[2])
-
