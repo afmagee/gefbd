@@ -3,10 +3,10 @@ library(coda)
 
 # Get names of datasets
 ds.names <- list.files("data/")
-ds.names <- ds.names[grepl(".tre",ds.names,fixed=TRUE)]
+ds.names <- ds.names[grepl(".tre",ds.names,fixed=TRUE) & grepl(".priors.txt",ds.names,fixed=TRUE) == FALSE]
 
 # Read in CRBDP analyses
-all.analyses <- list.files("output/",full.names=TRUE)
+all.analyses <- list.files("output",full.names=TRUE)
 cr.analyses <- all.analyses[grepl("CRBDP",all.analyses)]
 
 # Convergence diagnostics
@@ -15,6 +15,7 @@ ress <- vector("list",length(ds.names))
 
 for (i in 1:length(ds.names)) {
   ds <- ds.names[i]
+  cat(i,")\t",ds,"\n",sep="")
 
   log.files <- cr.analyses[grepl(ds,cr.analyses)]
   posteriors <- lapply(log.files,read.table,sep="\t",header=TRUE,stringsAsFactors=FALSE,row.names=1)
