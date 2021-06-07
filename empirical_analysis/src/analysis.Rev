@@ -14,11 +14,14 @@ BDP_HYPERPRIOR = args[3]
 # Should we estimate mass extinctions?
 NUM_EXPECTED_ME = args[4]
 
+# The probability of extinction at fossilization (treatment)
+treatement_probability <- args[5]
+
 # Number of MCMC replicates
-NUM_REPS = args[5]
+NUM_REPS = args[6]
 
 # For reproducibility
-SEED = args[6]
+SEED = args[7]
 
 seed(SEED)
 
@@ -34,16 +37,11 @@ NUM_INTERVALS = 100
 # number of breaks between regimes, for convenience (only used for MRF models)
 NUM_BREAKS = NUM_INTERVALS - 1
 
-# Controls overall smoothness, if NUM_INTERVALS is changed, this should be changed
-global_scale_hyperprior <- 0.0021
-
 ##########
 # Constant parameters
 ##########
 
-sampling_at_present <- 14/20
-
-treatement_probability <- 0
+sampling_at_present <- 14/24
 
 expected_number_of_mass_extinctions <- NUM_EXPECTED_ME
 
