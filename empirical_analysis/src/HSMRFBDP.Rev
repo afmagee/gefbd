@@ -134,14 +134,6 @@ moves[++mvi] = mvShrinkExpand( delta_log_fossilization_rate, sd=fossilization_ra
 
 
 
-
-
-
-##########
-# treatment
-##########
-#treatment <- 0.0
-
 ##########
 # Assemble the tree model
 ##########
