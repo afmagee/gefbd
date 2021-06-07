@@ -145,7 +145,7 @@ if ( NUM_EXPECTED_ME == 0 ) {
                     lambda                                           = speciation_rate,
                     mu                                               = extinction_rate,
                     phi                                              = fossilization_rate,
-                    r                                                = treatment,
+                    r                                                = treatement_probability,
                     Phi                                              = sampling_at_present,
                     condition                                        = CONDITION,
                     taxa                                             = taxa,
