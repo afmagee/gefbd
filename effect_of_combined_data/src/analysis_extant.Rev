@@ -41,7 +41,7 @@ global_scale_hyperprior <- 0.0021
 # Constant parameters
 ##########
 
-sampling_at_present <- 14/20
+sampling_at_present <- 14/24
 
 treatement_probability <- 0
 
