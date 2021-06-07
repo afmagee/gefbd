@@ -34,5 +34,9 @@ ress <- do.call(cbind,ress)
 colnames(rpsrf) <- ds.names
 colnames(ress) <- ds.names
 
+
+## Create convergence directory
+dir.create("convergence", showWarnings=FALSE)
+
 write.csv(rpsrf,"convergence/CRBDP_rank_PSRF.csv",quote=FALSE)
 write.csv(ress,"convergence/CRBDP_rank_ESS.csv",quote=FALSE)
