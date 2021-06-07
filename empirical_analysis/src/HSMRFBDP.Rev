@@ -158,7 +158,7 @@ if ( NUM_EXPECTED_ME == 0 ) {
                     mu                                               = extinction_rate,
                     Mu                                               = mass_extinction_probabilities,
                     phi                                              = fossilization_rate,
-                    r                                                = treatment,
+                    r                                                = treatement_probability,
                     Phi                                              = sampling_at_present,
                     condition                                        = CONDITION,
                     taxa                                             = taxa,
