@@ -1,9 +1,9 @@
-# gefbd
+# Generalized eposidic fossilized-birth-death process
 
 This repository contains code for analyses in ...
 
-Code for performing specific analyses is described in the ReadMes found in the subfolders.
-The main folder is [empirical_analysis](empirical_analysis), which contains many files referenced in other folders and readmes, and the most detailed description of running analyses.
+Code for performing specific analyses is described in the ReadMe's found in the subfolders.
+The main folder is [empirical_analysis](empirical_analysis), which contains many files referenced in other folders and ReadMe's, and the most detailed description of running analyses.
 
 ### [empirical_analysis](empirical_analysis)
 This directory contains code to run 30 analyses on datasets from Wilberg et al. (2019) (5 prior settings and 6 datasets).
