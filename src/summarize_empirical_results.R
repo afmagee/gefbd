@@ -16,7 +16,7 @@ SUMMARIES_DIR = "empirical_analysis/summaries"
 grid.times <- computeGridEndTimes(100,243.5)
 
 # Get names of datasets
-ds.names <- list.files("empirical_analysis/data/")
+ds.names <- list.files("data/")
 ds.names <- ds.names[!grepl("priors",ds.names,fixed=TRUE)]
 ds.names <- ds.names[grepl(".tre",ds.names,fixed=TRUE)]
 
