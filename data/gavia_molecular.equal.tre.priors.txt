@@ -1,7 +1,7 @@
 
- speciation_rate_hyperprior_alpha <- 9.3857708183858
- speciation_rate_hyperprior_beta <- 27.1070114634574
- extinction_rate_hyperprior_alpha <- 9.33114162451389
- extinction_rate_hyperprior_beta <- 26.997670598647
- fossilization_rate_hyperprior_alpha <- 9.44976103300138
- fossilization_rate_hyperprior_beta <- 2541.90108943753
+ speciation_rate_hyperprior_alpha <- 8.69552548905337
+ speciation_rate_hyperprior_beta <- 24.4919147344411
+ extinction_rate_hyperprior_alpha <- 8.62160131554374
+ extinction_rate_hyperprior_beta <- 24.3419764384868
+ fossilization_rate_hyperprior_alpha <- 9.28935956545455
+ fossilization_rate_hyperprior_beta <- 2562.63621563763
