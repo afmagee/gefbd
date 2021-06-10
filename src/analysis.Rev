@@ -23,6 +23,9 @@ NUM_REPS = args[6]
 # For reproducibility
 SEED = args[7]
 
+# The output directory
+OUTPUT_DIR = args[8]
+
 seed(SEED)
 
 # Specify taxon file
@@ -89,7 +92,7 @@ mymodel = model(sampling_at_present)
 ##########
 
 ### set up the monitors that will output parameter values to file and screen
-monitors[1] = mnModel(filename="output/" + BDP_PRIOR + ME_PREFIX + "_" + TREE_FILE + ".log",printgen=10, separator = TAB)
+monitors[1] = mnModel(filename=OUTPUT_DIR + "/" + BDP_PRIOR + ME_PREFIX + "_" + TREE_FILE + ".log",printgen=10, separator = TAB)
 monitors[2] = mnScreen(printgen=1000)
 
 ##########

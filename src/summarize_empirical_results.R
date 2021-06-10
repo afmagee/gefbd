@@ -1,8 +1,8 @@
 library(coda)
 library(parallel)
 
-source("empirical_analysis/src/rank_based_convergence_diagnostics.R")
-source("empirical_analysis/src/plot_helper.R")
+source("src/rank_based_convergence_diagnostics.R")
+source("src/plot_helper.R")
 
 # Get arguments
 args = commandArgs(trailingOnly=TRUE)
@@ -69,7 +69,7 @@ res <- mclapply(todo,function(this_ds){
   rank.psrf <- NA
   ess <- NA
   ds_name <- basename(this_ds)
-  
+
   if ( !any(unlist(lapply(this.chain.logs,class)) == "try-error") && length(unique(ngen)) == 1 ) {
     # Concatenate
     this.chain.log <- do.call(rbind,this.chain.logs)
@@ -98,7 +98,7 @@ res <- mclapply(todo,function(this_ds){
     rank.psrf <- diagnoseConvergence(chains=this.chain.logs,return.both=FALSE)[,1]
     ess <- rankESS(list(this.chain.log))
   }
-  
+
   all.summaries <- list(est.q.025=est.q.025,
                         est.q.975=est.q.975,
                         est.q.05=est.q.05,
@@ -109,11 +109,11 @@ res <- mclapply(todo,function(this_ds){
                         rank.psrf=rank.psrf,
                         ess=ess)
   all.summaries <- do.call(rbind,all.summaries)
-  
+
   out.file <- paste0(SUMMARIES_DIR,"/",ds_name,"_summary.csv")
-  
+
   tmp <- try(write.csv(all.summaries,file=out.file))
-  
+
   return(paste0(ifelse(file.exists(out.file),"Successful","Failure")," in creating summary file for ",this_ds))
 },mc.cores=n.cores,mc.preschedule=FALSE)
 
