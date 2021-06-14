@@ -11,7 +11,8 @@ args = commandArgs(trailingOnly=TRUE)
 n.cores <- as.numeric(args[1])
 
 FIGURES_DIR = "empirical_analysis/figures"
-SUMMARIES_DIR = "empirical_analysis/summaries"
+OUTPUT_DIR = args[2]
+SUMMARIES_DIR = args[3]
 
 grid.times <- computeGridEndTimes(100,243.5)
 
@@ -37,14 +38,14 @@ for (i in 1:6) {
 
   for (ds in ds.names) {
 
-    this_combo <- paste0("empirical_analysis/output/HSMRFBDP_ME_prior_",this.ME,"_",ds,"")
+    this_combo <- paste0(OUTPUT_DIR,"/HSMRFBDP_ME_prior_",this.ME,"_",ds,"")
 
     todo <- c(todo,this_combo)
   }
 }
 
 
-all.logs <- list.files("empirical_analysis/output/",full.names=TRUE)
+all.logs <- list.files(OUTPUT_DIR,full.names=TRUE)
 all.logs <- all.logs[grepl("HSMRF",all.logs)]
 
 cat("About to attempt to read logfiles for these analyses:\n")
