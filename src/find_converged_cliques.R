@@ -1,7 +1,7 @@
 suppressMessages(library(coda,warn.conflicts=FALSE,quietly=TRUE))
 suppressMessages(library(igraph,warn.conflicts=FALSE,quietly=TRUE))
-source("empirical_analysis/src/rank_based_convergence_diagnostics.R")
-source("empirical_analysis/src/find_converged_cliques_utils.R")
+source("src/rank_based_convergence_diagnostics.R")
+source("src/find_converged_cliques_utils.R")
 
 # This is designed to be called with Rscript with several arguments
 # arg1: path to and prefix name of logfiles (e.g. ~/folder/output)
