@@ -23,7 +23,7 @@ ME_PRIOR         = args[3]
 PSRF_THRESHOLD   = as.numeric(args[4])
 
 
-recycling <- file.path(OUTPUT_DIR,"unconverged")
+recycling <- file.path(OUTPUT_DIR,"_unconverged")
 if ( !dir.exists(recycling) ) {
   dir.create(recycling)
 }
