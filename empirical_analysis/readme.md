@@ -2,8 +2,8 @@
 All data comes from Wilberg et al. (2019).
 
 ## Running a single analysis
-To set up an analysis, use the [`analysis.Rev`](src/analysis.Rev) file. This is designed to be called (from within `empirical_analyses/`, all filepaths here are relative to this) with 5 arguments,
-`<path/to/rb> analysis.Rev <treefile> <BDP_prior> <hyperprior_file> <ME_hyperprior> <seed>`
+To set up an analysis, use the [`analysis.Rev`](src/analysis.Rev) file. This is designed to be called (from within `empirical_analyses/`, all file paths here are relative to this) with 5 arguments,
+`<path/to/rb> analysis.Rev --args <treefile> <BDP_prior> <hyperprior_file> <ME_hyperprior> <seed>`
 The arguments are,
 - `<treefile>` the name of the treefile, must be nested within `data/`
 - `<BDP_prior>` the prior on the BDP, allowed are "CRBDP" for constant-rate analysis (used to set the hyperpriors) and "HSMRFBDP" for a horseshoe Markov random field prior
@@ -13,7 +13,7 @@ The arguments are,
 
 Other important information is hard-coded into the file and various files called within, including:
 - The taxon data file (name of file in `data/`)
-- Species sampling fraction of 14/20 (this is a known value in [0,1] for macroevolutionary applications, the proportion of extant species sampled at the present, and 0 for most phylodynamic applications)
+- Species sampling fraction of 14/24 (this is a known value in [0,1] for macroevolutionary applications, the proportion of extant species sampled at the present, and 0 for most phylodynamic applications)
 - Treatment probability of 0.0 (0 for macroevolution, assumed to be 1 for most phylodynamic applications)
 - Details of the HSMRF priors on BDP parameters:
   - Number of intervals is 100
@@ -36,7 +36,6 @@ Where all runs will place log files.
 Contains scripts for running and post-processing analyses.
 
 Rev scripts (for analyses):
-- [Analysis.Rev](src/Analysis.Rev): Analysis stub file. See above for details.
 - [Analysis.Rev](src/Analysis.Rev): Analysis stub file. See above for details.
 - [CRBDP.Rev](src/CRBDP.Rev): Called by analysis stub file for constant-rate analyses.
 - [HSMRFBDP.Rev](src/HSMRFBDP.Rev): Called by analysis stub file for analyses with time-varying rates.
