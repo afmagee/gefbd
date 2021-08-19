@@ -1,0 +1,71 @@
+################################################################################
+#
+# RevBayes Analysis: Bayesian inference of diversification rates under a
+#                    episodic birth-death model
+#
+#
+# authors: Sebastian Hoehna
+#
+################################################################################
+
+
+# first we create the standard deviation of the rates between intervals
+zeta_speciation <- abs(H / NUM_INTERVALS)
+zeta_extinction <- abs(H / NUM_INTERVALS)
+
+gamma_speciation ~ dnHalfCauchy(0,1)
+gamma_extinction ~ dnHalfCauchy(0,1)
+moves.append( mvScaleBactrian(gamma_speciation,weight=5.0) )
+moves.append( mvScaleBactrian(gamma_extinction,weight=5.0) )
+
+speciation_sd := gamma_speciation * zeta_speciation
+extinction_sd := gamma_extinction * zeta_extinction
+
+
+# create a random variable at the present time
+speciation_mean ~ dnUniform(0.0,100.0)
+extinction_mean ~ dnUniform(0.0,100.0)
+
+speciation_mean.setValue( 0.1 )
+extinction_mean.setValue( 0.05 )
+
+log_speciation_mean := ln( speciation_mean )
+log_extinction_mean := ln( extinction_mean )
+
+# apply moves on the rates
+moves.append( mvScaleBactrian(speciation_mean, weight=5) )
+moves.append( mvScaleBactrian(extinction_mean, weight=5) )
+
+
+for (i in 1:(NUM_INTERVALS) ) {
+
+    # create a random variable at the present time
+    speciation[i] ~ dnLognormal(log_speciation_mean, speciation_sd)
+    extinction[i] ~ dnLognormal(log_extinction_mean, extinction_sd)
+
+    speciation[i].setValue( 0.1 )
+    extinction[i].setValue( 0.09 )
+
+    # apply moves on the rates
+    moves.append( mvScaleBactrian(speciation[i], weight=5) )
+    moves.append( mvScaleBactrian(extinction[i], weight=5) )
+
+    delta_up_down_move[i] = mvUpDownScale(weight=2.0)
+    delta_up_down_move[i].addVariable(speciation[i],TRUE)
+    delta_up_down_move[i].addVariable(extinction[i],TRUE)
+    moves.append(  delta_up_down_move[i] )
+}
+
+moves.append( mvVectorScale(speciation, weight=10) )
+moves.append( mvVectorScale(extinction, weight=10) )
+
+moves.append( mvShrinkExpand( speciation, sd=gamma_speciation, weight=10 ) )
+moves.append( mvShrinkExpand( extinction, sd=gamma_extinction, weight=10 ) )
+
+
+rates_up_down_move = mvUpDownScale(weight=10.0)
+rates_up_down_move.addVariable(speciation,TRUE)
+rates_up_down_move.addVariable(extinction,TRUE)
+rates_up_down_move.addVariable(speciation_mean,TRUE)
+rates_up_down_move.addVariable(extinction_mean,TRUE)
+moves.append(  rates_up_down_move )

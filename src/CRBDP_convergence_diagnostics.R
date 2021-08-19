@@ -6,7 +6,7 @@ ds.names <- list.files("data/")
 ds.names <- ds.names[grepl(".tre",ds.names,fixed=TRUE) & grepl(".priors.txt",ds.names,fixed=TRUE) == FALSE]
 
 # Read in CRBDP analyses
-all.analyses <- list.files("output",full.names=TRUE)
+all.analyses <- list.files("empirical_analysis/output_CRBDP",full.names=TRUE)
 cr.analyses <- all.analyses[grepl("CRBDP",all.analyses)]
 
 # Convergence diagnostics
