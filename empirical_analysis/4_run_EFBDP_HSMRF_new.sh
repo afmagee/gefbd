@@ -41,7 +41,7 @@ do
 #SBATCH --qos=low_prio_res
 #
 #SBATCH --mail-user sebastian.hoehna@gmail.com
-#SBATCH --mail-type=ALL
+#SBATCH --mail-type=NONE
 
 module load gnu
 module load boost
