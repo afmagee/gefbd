@@ -38,7 +38,7 @@ do
 #SBATCH --ntasks=${N_CORES}
 #SBATCH --nodes=1
 #SBATCH --mem=${N_CORES}G
-#SBATCH --qos=low
+#SBATCH --qos=low_prio_res
 #
 #SBATCH --mail-user sebastian.hoehna@gmail.com
 #SBATCH --mail-type=ALL
