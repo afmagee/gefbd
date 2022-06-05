@@ -83,7 +83,6 @@ if ( age_uncertainty == "both" || age_uncertainty == "tip" ) {
 
   for ( this_taxon in taxa ) {
 
-    this_taxon
     index = observed_tree.tipIndex(this_taxon)
     min_age = this_taxon.getMinAge()
     if ( min_age <= 0.005 ) {
@@ -128,7 +127,6 @@ if ( age_uncertainty == "both" || age_uncertainty == "tip" ) {
 
   fossils = timetree.getFossils()
   for(i in 1:fossils.size()) {
-    fossils[i] + "" + i
     t[i] := tmrca(timetree, clade(fossils[i]))
 
     a_i = 0
