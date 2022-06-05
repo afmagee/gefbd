@@ -6,6 +6,7 @@ if (NUM_EXPECTED_ME > 0.0) {
   mix_p <- Probability(1.0 - expected_number_of_mass_extinctions/NUM_BREAKS)
   for (i in 1:(NUM_INTERVALS-1)) {
     mass_extinction_probabilities[i] ~ dnReversibleJumpMixture(0.0,dnBeta(18.0,2.0),mix_p)
+    mass_extinction_probabilities[i].setValue(0.5)
     moves.append( mvRJSwitch(mass_extinction_probabilities[i], weight=3) )
     moves.append( mvSlideBactrian(mass_extinction_probabilities[i], weight=3) )
   }
