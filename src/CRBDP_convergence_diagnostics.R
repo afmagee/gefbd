@@ -4,6 +4,7 @@ library(coda)
 # Get names of datasets
 ds.names <- list.files("data/")
 ds.names <- ds.names[grepl(".tre",ds.names,fixed=TRUE) & grepl(".priors.txt",ds.names,fixed=TRUE) == FALSE]
+ds.names <- c("Wilberg","Stubbs")
 
 # Read in CRBDP analyses
 all.analyses <- list.files("empirical_analysis/output_CRBDP",full.names=TRUE)

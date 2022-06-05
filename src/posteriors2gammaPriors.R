@@ -29,6 +29,7 @@ getConcatenatedLogFile <- function(rb.file.prefix) {
   folder <- dirname(rb.file.prefix)
   rb_logs <- list.files(folder,full.names=TRUE)
   rb_logs <- rb_logs[grepl(basename(rb.file.prefix),rb_logs)]
+  rb_logs <- rb_logs[grepl(".log",rb_logs)]
   rb <- do.call(rbind,lapply(rb_logs,read.table,stringsAsFactors=FALSE,header=TRUE))
   return(rb)
 }
