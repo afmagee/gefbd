@@ -46,7 +46,7 @@ NUM_INTERVALS = 100
 NUM_BREAKS = NUM_INTERVALS - 1
 
 # number of MCMC iterations
-NUM_MCMC_ITERATIONS = 200000
+NUM_MCMC_ITERATIONS = 50000
 #NUM_MCMC_ITERATIONS = 20
 
 # the thinning between MCMC samples
@@ -177,7 +177,7 @@ monitors.append( mnScreen(printgen=100) )
 mymcmc = mcmc(mymodel, monitors, moves, nruns=NUM_REPS)
 
 ### Use burnin to tune the MH proposals ###
-mymcmc.burnin(generations=NUM_MCMC_ITERATIONS / 10.0, tuningInterval=100)
+mymcmc.burnin(generations=2000, tuningInterval=100)
 
 ### run the MCMC ###
 mymcmc.run(generations=NUM_MCMC_ITERATIONS)
