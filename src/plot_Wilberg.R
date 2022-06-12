@@ -24,7 +24,7 @@ grid.times <- computeGridEndTimes(100,243.5)
 #ds.names <- "gavia_mol_minus_thoracosaurs.equal.tre"
 
 ME.priors <- c("0","0.1","0.5","1","2","5")
-#ME.priors <- c("0","0.1","0.5")
+#ME.priors <- c("0","0.5")
 
 ## Create figures directory
 dir.create(FIGURES_DIR, showWarnings=FALSE)
