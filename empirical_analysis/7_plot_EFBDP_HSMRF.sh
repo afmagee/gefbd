@@ -6,6 +6,22 @@ N_CORES=4
 JOB_DIR="empirical_analysis/jobs_HSMRF_plot"
 LOG_DIR="empirical_analysis/logs_HSMRF_plot"
 
+if [ ${JOB_DIR} != "" ]; then
+  if [ ! -d ${JOB_DIR} ]; then
+    mkdir ${JOB_DIR}
+  else
+    rm -f ${JOB_DIR}/*
+  fi
+fi
+
+if [ ${LOG_DIR} != "" ]; then
+  if [ ! -d ${LOG_DIR} ]; then
+    mkdir ${LOG_DIR}
+  else
+    rm -f ${LOG_DIR}/*
+  fi
+fi
+
 for me_prior in "0.0" "0.1" "0.5" "1.0" "2.0" "5.0";
 do
 
