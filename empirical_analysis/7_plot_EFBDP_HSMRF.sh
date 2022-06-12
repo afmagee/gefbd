@@ -14,6 +14,8 @@
 #Rscript src/plot_HSMRFBDP.R empirical_analysis/output empirical_analysis/figures
 #Rscript src/plot_HSMRFBDP.R empirical_analysis/output_treatment empirical_analysis/figures_treatment
 
+module load R
+
 for uncertainty in "none" "tip" "node" "both";
 do
 
