@@ -187,6 +187,8 @@ if ( USE_TREE_SAMPLE ) {
                       taxa                                             = taxa,
                       initialTree                                      = observed_tree)
   } else {
+"ME"
+mass_extinction_probabilities
     timetree ~ dnBDSTP(
                       rootAge                                          = root_height,
                       timeline                                         = interval_times,
