@@ -19,7 +19,7 @@ BDP_HYPERPRIOR = args[4]
 NUM_EXPECTED_ME = args[5]
 
 # The probability of extinction at fossilization (treatment)
-treatement_probability <- args[6]
+treatment_option = args[6]
 
 # what type of age uncertainty should we include?
 # allowed are: none|tip|node|both
@@ -51,8 +51,6 @@ NUM_MCMC_ITERATIONS = 50000
 
 # the thinning between MCMC samples
 SAMPLING_FREQ = 1
-
-USE_TREE_SAMPLE = FALSE
 
 
 ##########
@@ -112,6 +110,19 @@ if (BDP_PRIOR != "CRBDP") {
 }
 
 ME_PREFIX = "_ME_prior_" + NUM_EXPECTED_ME
+
+##########
+# Treatment
+##########
+
+if ( treatment_option == 0 || treatment_option == 1 ) {
+  treatment_probability <- treatment_option
+} else {
+  treatment_probability ~ dnBeta(1,1)
+  moves.append( mvBetaProbability(treatment_probability, weight=3) )
+}
+
+
 
 ##########
 # Tree model
