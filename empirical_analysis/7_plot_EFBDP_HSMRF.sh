@@ -22,13 +22,14 @@ if [ ${LOG_DIR} != "" ]; then
   fi
 fi
 
-for me_prior in "0.0" "0.1" "0.5" "1.0" "2.0" "5.0";
+for me_prior in "0.0" "0.1" "0.5" "1" "2" "5";
 do
 
     for uncertainty in "none" "tip" "node" "both";
     do
 
         for ds in "Wilberg" "Stubbs";
+#        for ds in "Wilberg";
         do
 
             echo "#!/bin/bash
@@ -50,6 +51,6 @@ Rscript src/plot_Wilberg.R empirical_analysis/output_${ds}_${uncertainty} empiri
 
         done
 
-	done
+    done
 
 done
