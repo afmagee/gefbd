@@ -6,10 +6,9 @@
 #SBATCH --nodes=1
 #SBATCH --mem=32G
 #SBATCH --qos=low_prio_res
-#SBATCH --time=7-00:00:00
-#
-#SBATCH --mail-user sebastian.hoehna@gmail.com
-#SBATCH --mail-type=ALL
+#SBATCH --time=12:00:00
+
+module load R
 
 #for ds in "calsoy_as_gonio" "gavia_molecular" "gavia_mol_minus_thoracosaurs" "stolokro_as_basal_neo" "thalatto_as_basal_crocodyliformes" "thalatto_in_longirostrine_clade";
 for ds in "Wilberg" "Stubbs";
