@@ -8,7 +8,7 @@ ds.names <- c("Wilberg","Stubbs")
 
 # Read in CRBDP analyses
 all.analyses <- list.files("empirical_analysis/output_CRBDP",full.names=TRUE)
-cr.analyses <- all.analyses[grepl("CRBDP",all.analyses)]
+cr.analyses  <- all.analyses[grepl("CRBDP",all.analyses) & grepl(".trees",all.analyses,fixed=TRUE) == FALSE]
 
 # Convergence diagnostics
 rpsrf <- vector("list",length(ds.names))
@@ -19,7 +19,9 @@ for (i in 1:length(ds.names)) {
   cat(i,")\t",ds,"\n",sep="")
 
   log.files <- cr.analyses[grepl(ds,cr.analyses)]
+  cat("log-files:\t",log.files,"\n")
   posteriors <- lapply(log.files,read.table,sep="\t",header=TRUE,stringsAsFactors=FALSE,row.names=1)
+  posteriors <- lapply(posteriors, function(x) x[!(names(x) %in% c("Prior"))])
 
   # Rank-based PSRF
   rpsrf[[i]] <- diagnoseConvergence(posteriors,FALSE)
