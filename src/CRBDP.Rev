@@ -30,6 +30,6 @@ timetree ~ dnBDSTP(
                     mu                                               = extinction_rate,
                     phi                                              = fossilization_rate,
                     Phi                                              = sampling_at_present,
-                    r                                                = 0.0,
+                    r                                                = treatment_probability,
                     condition                                        = CONDITION,
                     taxa                                             = taxa)

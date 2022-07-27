@@ -138,66 +138,29 @@ moves.append( mvShrinkExpand( delta_log_fossilization_rate, sd=fossilization_rat
 # Assemble the tree model
 ##########
 
-if ( USE_TREE_SAMPLE ) {
-
-  origin_time ~ dnUniform( 240, 300 )
-  moves.append( mvSlideBactrian(origin_time, weight=2) )
-  moves.append( mvScaleBactrian(origin_time, weight=2) )
-
-  if ( NUM_EXPECTED_ME == 0 ) {
-    tree_prior = dnBDSTP(
-                      originAge                                        = origin_time,
+if ( NUM_EXPECTED_ME == 0 ) {
+  timetree ~ dnBDSTP(
+                      rootAge                                          = root_height,
                       timeline                                         = interval_times,
                       lambda                                           = speciation_rate,
                       mu                                               = extinction_rate,
                       phi                                              = fossilization_rate,
-                      r                                                = treatement_probability,
+                      r                                                = treatment_probability,
                       Phi                                              = sampling_at_present,
                       condition                                        = CONDITION,
                       taxa                                             = taxa,
                       initialTree                                      = observed_tree)
-  } else {
-    tree_prior = dnBDSTP(
-                      originAge                                          = origin_time,
-                      timeline                                         = interval_times,
-                      lambda                                           = speciation_rate,
-                      mu                                               = extinction_rate,
-                      Mu                                               = mass_extinction_probabilities,
-                      phi                                              = fossilization_rate,
-                      r                                                = treatement_probability,
-                      Phi                                              = sampling_at_present,
-                      condition                                        = CONDITION,
-                      taxa                                             = taxa,
-                      initialTree                                      = observed_tree)
-  }
-  timetrees ~ dnEmpiricalSample(tree_prior)
-
 } else {
-
-  if ( NUM_EXPECTED_ME == 0 ) {
-    timetree ~ dnBDSTP(
-                      rootAge                                          = root_height,
-                      timeline                                         = interval_times,
-                      lambda                                           = speciation_rate,
-                      mu                                               = extinction_rate,
-                      phi                                              = fossilization_rate,
-                      r                                                = treatement_probability,
-                      Phi                                              = sampling_at_present,
-                      condition                                        = CONDITION,
-                      taxa                                             = taxa,
-                      initialTree                                      = observed_tree)
-  } else {
-    timetree ~ dnBDSTP(
+  timetree ~ dnBDSTP(
                       rootAge                                          = root_height,
                       timeline                                         = interval_times,
                       lambda                                           = speciation_rate,
                       mu                                               = extinction_rate,
                       Mu                                               = mass_extinction_probabilities,
                       phi                                              = fossilization_rate,
-                      r                                                = treatement_probability,
+                      r                                                = treatment_probability,
                       Phi                                              = sampling_at_present,
                       condition                                        = CONDITION,
                       taxa                                             = taxa,
                       initialTree                                      = observed_tree)
-  }
 }
