@@ -151,27 +151,7 @@ if ( NUM_EXPECTED_ME == 0 ) {
                       taxa                                             = taxa,
                       initialTree                                      = observed_tree)
 } else {
-<<<<<<< HEAD
-
-  if ( NUM_EXPECTED_ME == 0 ) {
-    timetree ~ dnBDSTP(
-                      rootAge                                          = root_height,
-                      timeline                                         = interval_times,
-                      lambda                                           = speciation_rate,
-                      mu                                               = extinction_rate,
-                      phi                                              = fossilization_rate,
-                      r                                                = treatement_probability,
-                      Phi                                              = sampling_at_present,
-                      condition                                        = CONDITION,
-                      taxa                                             = taxa,
-                      initialTree                                      = observed_tree)
-  } else {
-"ME"
-mass_extinction_probabilities
-    timetree ~ dnBDSTP(
-=======
   timetree ~ dnBDSTP(
->>>>>>> 50c9f8b04fb42fd2067a9f63c88f594742b2b027
                       rootAge                                          = root_height,
                       timeline                                         = interval_times,
                       lambda                                           = speciation_rate,
