@@ -19,7 +19,6 @@ for (i in 1:length(ds.names)) {
   cat(i,")\t",ds,"\n",sep="")
 
   log.files <- cr.analyses[grepl(ds,cr.analyses)]
-  cat("log-files:\t",log.files,"\n")
   posteriors <- lapply(log.files,read.table,sep="\t",header=TRUE,stringsAsFactors=FALSE,row.names=1)
   posteriors <- lapply(posteriors, function(x) x[!(names(x) %in% c("Prior"))])
 
