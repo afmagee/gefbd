@@ -40,8 +40,8 @@ module load gnu/7
 module load boost
 module load openmpi
 
-# <path/to/rb> analysis.Rev --args <treefile> <BDP_prior> <hyperprior_file> <ME_hyperprior> <treatement_probability> <NUM_REPS> <seed>
-mpirun -np ${N_CORES} ${exec} src/analysis_age_uncertainty.Rev --args ${ds}.tre crocs_taxa_range_${ds}.tsv CRBDP none 0 0 none ${N_CORES} 1234 empirical_analysis/output_CRBDP > ${LOG_DIR}/${ds}.out
+# <path/to/rb> analysis.Rev --args <treefile> <taxonfile> <BDP_prior> <hyperprior_file> <ME_hyperprior> <treatement_probability> <age_uncertainty> <NUM_REPS> <seed>
+mpirun -np ${N_CORES} ${exec} src/analysis_age_uncertainty.Rev --args ${ds}.tre crocs_taxa_range_${ds}.tsv CRBDP none 0 0.5 none ${N_CORES} 1234 empirical_analysis/output_CRBDP > ${LOG_DIR}/${ds}.out
 " > ${JOB_DIR}/${ds}.sh
     sbatch ${JOB_DIR}/${ds}.sh
 
