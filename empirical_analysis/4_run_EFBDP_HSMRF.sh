@@ -32,9 +32,9 @@ do
         do
 
             echo "#!/bin/bash
-#SBATCH --job-name=BDSTP_crocs_${ds}_${me_prior}
-#SBATCH --output=BDSTP_crocs_${ds}_${me_prior}.log
-#SBATCH --error=BDSTP_crocs_${ds}_${me_prior}.err
+#SBATCH --job-name=${ds}_${uncertainty}_${me_prior}
+#SBATCH --output=${ds}_${uncertainty}_${me_prior}.log
+#SBATCH --error=${ds}_${uncertainty}_${me_prior}.err
 #SBATCH --ntasks=${N_CORES}
 #SBATCH --nodes=1
 #SBATCH --mem=${N_CORES}G
