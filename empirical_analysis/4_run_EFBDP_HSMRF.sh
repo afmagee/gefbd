@@ -38,10 +38,8 @@ do
 #SBATCH --ntasks=${N_CORES}
 #SBATCH --nodes=1
 #SBATCH --mem=${N_CORES}G
-#SBATCH --qos=low_prio_res
-#
-#SBATCH --mail-user sebastian.hoehna@gmail.com
-#SBATCH --mail-type=NONE
+#SBATCH --qos=low_prio_long
+#SBATCH --time=180-00:00:00
 
 module load gnu
 module load boost
@@ -50,7 +48,7 @@ module load openmpi
 # <path/to/rb> analysis_age_uncertainty.Rev --args <treefile> <TAXON_FILE> <BDP_prior> <hyperprior_file> <ME_hyperprior> <treatement_probability> <age_uncertainty> <NUM_REPS> <seed> <OUTPUT_DIR>
 mpirun -np ${N_CORES} ${exec} src/analysis_age_uncertainty.Rev --args ${ds}.tre crocs_taxa_range_${ds}.tsv HSMRFBDP ${ds}.priors.txt ${me_prior} 0.5 ${uncertainty} ${N_CORES} 1234 empirical_analysis/output_${ds}_${uncertainty} > ${LOG_DIR}/${ds}_${uncertainty}_${me_prior}.out
 " > ${JOB_DIR}/${ds}_${uncertainty}_${me_prior}.sh
-        sbatch ${JOB_DIR}/${ds}_${uncertainty}_${me_prior}.sh
+            sbatch ${JOB_DIR}/${ds}_${uncertainty}_${me_prior}.sh
 
         done
 
