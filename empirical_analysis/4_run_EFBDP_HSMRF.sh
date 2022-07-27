@@ -1,6 +1,6 @@
 #!/bin/bash
 
-N_CORES=4
+N_CORES=16
 JOB_DIR="empirical_analysis/jobs_HSMRF"
 LOG_DIR="empirical_analysis/logs_HSMRF"
 exec=rb-mpi-coal
@@ -22,10 +22,10 @@ if [ ${LOG_DIR} != "" ]; then
 fi
 
 
-for me_prior in "0.0" "0.1" "0.5" "1.0" "2.0" "5.0";
+for me_prior in "0.0" "0.5" "2.0";
 do
 
-    for uncertainty in "none" "tip" "node" "both";
+    for uncertainty in "none" "both";
     do
 
         for ds in "Wilberg" "Stubbs";
@@ -48,10 +48,9 @@ module load boost
 module load openmpi
 
 # <path/to/rb> analysis_age_uncertainty.Rev --args <treefile> <TAXON_FILE> <BDP_prior> <hyperprior_file> <ME_hyperprior> <treatement_probability> <age_uncertainty> <NUM_REPS> <seed> <OUTPUT_DIR>
-mpirun -np ${N_CORES} ${exec} src/analysis_age_uncertainty.Rev --args ${ds}.tre crocs_taxa_range_${ds}.tsv HSMRFBDP ${ds}.priors.txt ${me_prior} 0 ${uncertainty} ${N_CORES} 1234 empirical_analysis/output_${ds}_${uncertainty} > ${LOG_DIR}/${ds}_${uncertainty}_${me_prior}.out
+mpirun -np ${N_CORES} ${exec} src/analysis_age_uncertainty.Rev --args ${ds}.tre crocs_taxa_range_${ds}.tsv HSMRFBDP ${ds}.priors.txt ${me_prior} 0.5 ${uncertainty} ${N_CORES} 1234 empirical_analysis/output_${ds}_${uncertainty} > ${LOG_DIR}/${ds}_${uncertainty}_${me_prior}.out
 " > ${JOB_DIR}/${ds}_${uncertainty}_${me_prior}.sh
         sbatch ${JOB_DIR}/${ds}_${uncertainty}_${me_prior}.sh
-#        bash ${JOB_DIR}/${ds}_${uncertainty}_${me_prior}.sh
 
         done
 
