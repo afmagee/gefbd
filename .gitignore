@@ -1,3 +1,28 @@
 # output files
 empirical_analysis/convergence
-empirical_analysis/output
+empirical_analysis/figures*
+empirical_analysis/output*
+empirical_analysis/jobs*
+empirical_analysis/logs*
+
+figures*
+jobs*
+logs*
+
+# current additional data files
+data/Stubbs2021_Hedman.tree
+data/Stubbs2021_MBL.tree
+data/Stubbs2021_cal3_1.tree
+data/Stubbs2021_cal3_2.tree
+data/Stubbs2021_cal3_3.tree
+data/Stubbs2021_cal3_4.tree
+data/Stubbs2021_equal.tree
+data/crocs_taxa_.csv
+data/crocs_taxa_range.tsv
+data/crocs_taxa_range_2.tsv
+data/crocs_taxa_range_3.tsv
+data/crocs_taxa_range_Stubbs_MBL.tsv
+data/stubbs_1_pruned.tre
+data/stubbs_1_pruned_wilberg_times.tre
+data/supertree.tre
+
