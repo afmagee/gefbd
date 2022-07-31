@@ -1,0 +1,124 @@
+##########
+# Setup and hyperpriors
+##########
+
+# Chop up duration from root to present into equally sized intervals
+interval_times <- abs(root_height * seq(1, NUM_BREAKS, 1)/NUM_INTERVALS)
+
+# empirical Bayes hyperpriors for speciation_rate, extinction_rate, and sampling at present
+source("data/" + BDP_HYPERPRIOR)
+
+######################
+# rates through time #
+######################
+
+H <- 0.587405
+
+for (i in 1:NUM_INTERVALS) {
+
+   speciation_rate[i] ~ dnLognormal( ln(speciation_rate_hyperprior_alpha/speciation_rate_hyperprior_beta), 2*H )
+   extinction_rate[i] ~ dnLognormal( ln(extinction_rate_hyperprior_alpha/extinction_rate_hyperprior_beta), 2*H )
+   fossilization_rate[i] ~ dnLognormal( ln(fossilization_rate_hyperprior_alpha/fossilization_rate_hyperprior_beta), 2*H )
+
+  # Make sure values initialize to something reasonable
+#  speciation_rate[i].setValue(runif(1,0.005,0.1)[1])
+#  extinction_rate[i].setValue(runif(1,0.005,0.1)[1])
+#  sigma_fossilization_rate[i].setValue(runif(1,0.005,0.1)[1])
+
+  # moves on the single sigma values
+  moves.append( mvScaleBactrian(speciation_rate[i], weight=5) )
+  moves.append( mvScaleBactrian(extinction_rate[i], weight=5) )
+  moves.append( mvScaleBactrian(fossilization_rate[i], weight=5) )
+
+  delta_up_down_move[i] = mvUpDownScale(weight=5.0)
+  delta_up_down_move[i].addVariable(speciation_rate[i],TRUE)
+  delta_up_down_move[i].addVariable(extinction_rate[i],TRUE)
+  moves.append( delta_up_down_move[i] )
+
+}
+
+# joint sliding moves of all vector elements
+moves.append( mvVectorSlide(speciation_rate, weight=10) )
+moves.append( mvVectorSlide(extinction_rate, weight=10) )
+moves.append( mvVectorSlide(fossilization_rate, weight=10) )
+
+# up-down slide of the entire vector and the rate at present
+rates_up_down_move = mvUpDownScale(weight=10.0)
+rates_up_down_move.addVariable(speciation_rate,FALSE)
+rates_up_down_move.addVariable(extinction_rate,FALSE)
+moves.append( rates_up_down_move )
+
+# shrink expand moves
+moves.append( mvShrinkExpand( speciation_rate, weight=10 ) )
+moves.append( mvShrinkExpand( extinction_rate, weight=10 ) )
+moves.append( mvShrinkExpand( fossilization_rate, weight=10 ) )
+
+
+
+##########
+# Assemble the tree model
+##########
+
+if ( USE_TREE_SAMPLE ) {
+
+  origin_time ~ dnUniform( 240, 300 )
+  moves.append( mvSlideBactrian(origin_time, weight=2) )
+  moves.append( mvScaleBactrian(origin_time, weight=2) )
+
+  if ( NUM_EXPECTED_ME == 0 ) {
+    tree_prior = dnBDSTP(
+                      originAge                                        = origin_time,
+                      timeline                                         = interval_times,
+                      lambda                                           = speciation_rate,
+                      mu                                               = extinction_rate,
+                      phi                                              = fossilization_rate,
+                      r                                                = treatement_probability,
+                      Phi                                              = sampling_at_present,
+                      condition                                        = CONDITION,
+                      taxa                                             = taxa,
+                      initialTree                                      = observed_tree)
+  } else {
+    tree_prior = dnBDSTP(
+                      originAge                                          = origin_time,
+                      timeline                                         = interval_times,
+                      lambda                                           = speciation_rate,
+                      mu                                               = extinction_rate,
+                      Mu                                               = mass_extinction_probabilities,
+                      phi                                              = fossilization_rate,
+                      r                                                = treatement_probability,
+                      Phi                                              = sampling_at_present,
+                      condition                                        = CONDITION,
+                      taxa                                             = taxa,
+                      initialTree                                      = observed_tree)
+  }
+  timetrees ~ dnEmpiricalSample(tree_prior)
+
+} else {
+
+  if ( NUM_EXPECTED_ME == 0 ) {
+    timetree ~ dnBDSTP(
+                      rootAge                                          = root_height,
+                      timeline                                         = interval_times,
+                      lambda                                           = speciation_rate,
+                      mu                                               = extinction_rate,
+                      phi                                              = fossilization_rate,
+                      r                                                = treatement_probability,
+                      Phi                                              = sampling_at_present,
+                      condition                                        = CONDITION,
+                      taxa                                             = taxa,
+                      initialTree                                      = observed_tree)
+  } else {
+    timetree ~ dnBDSTP(
+                      rootAge                                          = root_height,
+                      timeline                                         = interval_times,
+                      lambda                                           = speciation_rate,
+                      mu                                               = extinction_rate,
+                      Mu                                               = mass_extinction_probabilities,
+                      phi                                              = fossilization_rate,
+                      r                                                = treatement_probability,
+                      Phi                                              = sampling_at_present,
+                      condition                                        = CONDITION,
+                      taxa                                             = taxa,
+                      initialTree                                      = observed_tree)
+  }
+}

@@ -1,0 +1,22 @@
+# Copy always the bash scripts to the cluster
+scp empirical_analysis/*.sh shoehna@mplogin1.hpc.palmuc.org:/sto/hpcbayes/shoehna/projects/gefbd/empirical_analysis/
+
+# running all the analyses
+> cd /sto/hpcbayes/shoehna/projects/gefbd
+> bash empirical_analysis/1_run_CRBDP.sh
+>>> scp -r shoehna@mplogin1.hpc.palmuc.org:/sto/hpcbayes/shoehna/projects/gefbd/empirical_analysis/output_CRBDP empirical_analysis/
+> sbatch empirical_analysis/2_convergence_CRBDP.sh
+> sbatch empirical_analysis/3_compute_hyperpriors.sh
+> bash empirical_analysis/4_run_EFBDP_HSMRF.sh
+> sbatch empirical_analysis/5_convergence_assessment_EFBDP_HSMRF.sh
+> sbatch empirical_analysis/6_summarize_HSMRF.sh
+
+
+##############
+
+current -> 4
+
+##############
+
+
+scp 'shoehna@mplogin1.hpc.palmuc.org:/sto/hpcbayes/shoehna/projects/gefbd/empirical_analysis/output/*' empirical_analysis/output
