@@ -15,7 +15,7 @@ BDP_HYPERPRIOR = args[3]
 NUM_EXPECTED_ME = args[4]
 
 # The probability of extinction at fossilization (treatment)
-treatement_probability <- args[5]
+treatment_probability <- args[5]
 
 # The probability of extinction at fossilization (treatment)
 USE_TREE_SAMPLE <- (args[6] == "sample")

@@ -1,0 +1,146 @@
+##########
+# Setup and hyperpriors
+##########
+
+# Chop up duration from root to present into equally sized intervals
+interval_times <- abs(root_height * seq(1, NUM_BREAKS, 1)/NUM_INTERVALS)
+
+# empirical Bayes hyperpriors for speciation_rate, extinction_rate, and sampling at present
+source("data/" + BDP_HYPERPRIOR)
+
+######################
+# rates through time #
+######################
+
+
+speciation_rate_at_present ~ dnGamma(speciation_rate_hyperprior_alpha,speciation_rate_hyperprior_beta)
+extinction_rate_at_present ~ dnGamma(extinction_rate_hyperprior_alpha,extinction_rate_hyperprior_beta)
+fossilization_rate_at_present ~ dnGamma(fossilization_rate_hyperprior_alpha,fossilization_rate_hyperprior_beta)
+
+avmvn_rates_at_present = mvAVMVN(weight=50)
+avmvn_rates_at_present.addVariable(speciation_rate_at_present)
+avmvn_rates_at_present.addVariable(extinction_rate_at_present)
+avmvn_rates_at_present.addVariable(fossilization_rate_at_present)
+moves.append( avmvn_rates_at_present )
+
+up_down_move = mvUpDownScale(weight=5.0)
+up_down_move.addVariable(speciation_rate_at_present,TRUE)
+up_down_move.addVariable(extinction_rate_at_present,TRUE)
+moves.append( up_down_move )
+
+moves.append( mvScaleBactrian(speciation_rate_at_present,weight=5) )
+moves.append( mvScaleBactrian(extinction_rate_at_present,weight=5) )
+moves.append( mvScaleBactrian(fossilization_rate_at_present,weight=5) )
+moves.append( mvMirrorMultiplier(speciation_rate_at_present,weight=5) )
+moves.append( mvMirrorMultiplier(extinction_rate_at_present,weight=5) )
+moves.append( mvMirrorMultiplier(fossilization_rate_at_present,weight=5) )
+moves.append( mvRandomDive(speciation_rate_at_present,weight=5) )
+moves.append( mvRandomDive(extinction_rate_at_present,weight=5) )
+moves.append( mvRandomDive(fossilization_rate_at_present,weight=5) )
+
+
+## Global shrinkage parameter
+speciation_rate_global_scale_hyperprior     <- 0.0094
+extinction_rate_global_scale_hyperprior     <- 0.0094
+fossilization_rate_global_scale_hyperprior  <- 0.0094
+
+speciation_rate_global_scale ~ dnHalfCauchy(0,1)
+extinction_rate_global_scale ~ dnHalfCauchy(0,1)
+fossilization_rate_global_scale ~ dnHalfCauchy(0,1)
+
+speciation_rate_global_scale.setValue(runif(1,0.005,0.1)[1])
+extinction_rate_global_scale.setValue(runif(1,0.005,0.1)[1])
+fossilization_rate_global_scale.setValue(runif(1,0.005,0.1)[1])
+
+moves.append( mvScaleBactrian(speciation_rate_global_scale,weight=5.0) )
+moves.append( mvScaleBactrian(extinction_rate_global_scale,weight=5.0) )
+moves.append( mvScaleBactrian(fossilization_rate_global_scale,weight=5.0) )
+
+for (i in 1:(NUM_INTERVALS-1)) {
+
+  # non-centralized parameterization of horseshoe
+  delta_log_speciation_rate[i] ~ dnNormal( mean=0, sd=speciation_rate_global_scale*speciation_rate_global_scale_hyperprior )
+  delta_log_extinction_rate[i] ~ dnNormal( mean=0, sd=extinction_rate_global_scale*extinction_rate_global_scale_hyperprior )
+  delta_log_fossilization_rate[i] ~ dnNormal( mean=0, sd=fossilization_rate_global_scale*fossilization_rate_global_scale_hyperprior )
+
+  # Make sure values initialize to something reasonable
+  delta_log_speciation_rate[i].setValue(runif(1,-0.1,0.1)[1])
+  delta_log_extinction_rate[i].setValue(runif(1,-0.1,0.1)[1])
+  delta_log_fossilization_rate[i].setValue(runif(1,-0.1,0.1)[1])
+
+  moves.append( mvSlideBactrian(delta_log_speciation_rate[i], weight=5) )
+  moves.append( mvSlideBactrian(delta_log_extinction_rate[i], weight=5) )
+  moves.append( mvSlideBactrian(delta_log_fossilization_rate[i], weight=5) )
+
+  delta_up_down_move[i] = mvUpDownSlide(weight=5.0)
+  delta_up_down_move[i].addVariable(delta_log_speciation_rate[i],TRUE)
+  delta_up_down_move[i].addVariable(delta_log_extinction_rate[i],TRUE)
+  moves.append( delta_up_down_move[i] )
+
+}
+
+# Assemble first-order differences and speciation_rate at present into the random field
+speciation_rate := fnassembleContinuousMRF(speciation_rate_at_present,delta_log_speciation_rate,initialValueIsLogScale=FALSE,order=1)
+extinction_rate := fnassembleContinuousMRF(extinction_rate_at_present,delta_log_extinction_rate,initialValueIsLogScale=FALSE,order=1)
+fossilization_rate := fnassembleContinuousMRF(fossilization_rate_at_present,delta_log_fossilization_rate,initialValueIsLogScale=FALSE,order=1)
+
+# Move all field parameters in one go
+moves.append( mvEllipticalSliceSamplingSimple(delta_log_speciation_rate,weight=5,tune=FALSE) )
+moves.append( mvEllipticalSliceSamplingSimple(delta_log_extinction_rate,weight=5,tune=FALSE) )
+moves.append( mvEllipticalSliceSamplingSimple(delta_log_fossilization_rate,weight=5,tune=FALSE) )
+
+# Move all field hyperparameters in one go
+moves.append( mvGMRFHyperpriorGibbs(speciation_rate_global_scale, delta_log_speciation_rate, speciation_rate_global_scale_hyperprior, weight=5) )
+moves.append( mvGMRFHyperpriorGibbs(extinction_rate_global_scale, delta_log_extinction_rate, extinction_rate_global_scale_hyperprior, weight=5) )
+moves.append( mvGMRFHyperpriorGibbs(fossilization_rate_global_scale, delta_log_fossilization_rate, fossilization_rate_global_scale_hyperprior, weight=5) )
+
+# joint sliding moves of all vector elements
+moves.append( mvVectorSlide(delta_log_speciation_rate, weight=10) )
+moves.append( mvVectorSlide(delta_log_extinction_rate, weight=10) )
+moves.append( mvVectorSlide(delta_log_fossilization_rate, weight=10) )
+
+# up-down slide of the entire vector and the rate at present
+rates_up_down_move = mvUpDownScale(weight=10.0)
+rates_up_down_move.addVariable(speciation_rate_at_present,FALSE)
+rates_up_down_move.addVariable(extinction_rate_at_present,FALSE)
+rates_up_down_move.addVariable(delta_log_speciation_rate,TRUE)
+rates_up_down_move.addVariable(delta_log_extinction_rate,TRUE)
+moves.append( rates_up_down_move )
+
+# shrink expand moves
+moves.append( mvShrinkExpand( delta_log_speciation_rate, sd=speciation_rate_global_scale, weight=10 ) )
+moves.append( mvShrinkExpand( delta_log_extinction_rate, sd=extinction_rate_global_scale, weight=10 ) )
+moves.append( mvShrinkExpand( delta_log_fossilization_rate, sd=fossilization_rate_global_scale, weight=10 ) )
+
+
+
+##########
+# Assemble the tree model
+##########
+
+if ( NUM_EXPECTED_ME == 0 ) {
+  timetree ~ dnBDSTP(
+                      rootAge                                          = root_height,
+                      timeline                                         = interval_times,
+                      lambda                                           = speciation_rate,
+                      mu                                               = extinction_rate,
+                      phi                                              = fossilization_rate,
+                      r                                                = treatment_probability,
+                      Phi                                              = sampling_at_present,
+                      condition                                        = CONDITION,
+                      taxa                                             = taxa,
+                      initialTree                                      = observed_tree)
+} else {
+  timetree ~ dnBDSTP(
+                      rootAge                                          = root_height,
+                      timeline                                         = interval_times,
+                      lambda                                           = speciation_rate,
+                      mu                                               = extinction_rate,
+                      Mu                                               = mass_extinction_probabilities,
+                      phi                                              = fossilization_rate,
+                      r                                                = treatment_probability,
+                      Phi                                              = sampling_at_present,
+                      condition                                        = CONDITION,
+                      taxa                                             = taxa,
+                      initialTree                                      = observed_tree)
+}
