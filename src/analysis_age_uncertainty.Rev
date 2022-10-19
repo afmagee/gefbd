@@ -178,7 +178,7 @@ mymodel = model(sampling_at_present)
 ### set up the monitors that will output parameter values to file and screen
 monitors.append( mnModel(filename=OUTPUT_DIR + "/" + BDP_PRIOR + ME_PREFIX + "_" + TREE_FILE + ".log",printgen=SAMPLING_FREQ, separator = TAB) )
 monitors.append( mnFile(timetree , filename=OUTPUT_DIR + "/" + BDP_PRIOR + ME_PREFIX + "_" + TREE_FILE + ".trees", printgen=100, separator = TAB) )
-monitors.append( mnScreen(printgen=100) )
+monitors.append( mnScreen(printgen=10) )
 
 ##########
 # Run MCMC
