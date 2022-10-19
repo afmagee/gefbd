@@ -188,7 +188,7 @@ monitors.append( mnScreen(printgen=100) )
 mymcmc = mcmc(mymodel, monitors, moves, nruns=NUM_REPS)
 
 ### Use burnin to tune the MH proposals ###
-mymcmc.burnin(generations=5000, tuningInterval=100)
+#mymcmc.burnin(generations=5000, tuningInterval=100)
 
 ### run the MCMC ###
 mymcmc.run(generations=NUM_MCMC_ITERATIONS)
