@@ -40,7 +40,7 @@ seed(SEED)
 CONDITION = "time"
 
 # set number of speciation_rate regimes (only used for MRF models)
-NUM_INTERVALS = 10
+NUM_INTERVALS = 100
 
 # number of breaks between regimes, for convenience (only used for MRF models)
 NUM_BREAKS = NUM_INTERVALS - 1
@@ -188,7 +188,7 @@ monitors.append( mnScreen(printgen=10) )
 mymcmc = mcmc(mymodel, monitors, moves, nruns=NUM_REPS)
 
 ### Use burnin to tune the MH proposals ###
-#mymcmc.burnin(generations=5000, tuningInterval=100)
+mymcmc.burnin(generations=1000, tuningInterval=100)
 
 ### run the MCMC ###
 mymcmc.run(generations=NUM_MCMC_ITERATIONS)
