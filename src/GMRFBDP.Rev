@@ -40,28 +40,26 @@ moves.append( mvRandomDive(fossilization_rate_at_present,weight=5) )
 
 
 ## Global shrinkage parameter
-speciation_rate_global_scale_hyperprior     <- 0.0094
-extinction_rate_global_scale_hyperprior     <- 0.0094
-fossilization_rate_global_scale_hyperprior  <- 0.0094
+speciation_rate_global_scale <- 0.105
+extinction_rate_global_scale <- 0.105
+fossilization_rate_global_scale <- 0.105
 
-speciation_rate_global_scale ~ dnHalfCauchy(0,1)
-extinction_rate_global_scale ~ dnHalfCauchy(0,1)
-fossilization_rate_global_scale ~ dnHalfCauchy(0,1)
-
-speciation_rate_global_scale.setValue(runif(1,0.005,0.1)[1])
-extinction_rate_global_scale.setValue(runif(1,0.005,0.1)[1])
-fossilization_rate_global_scale.setValue(runif(1,0.005,0.1)[1])
-
-moves.append( mvScaleBactrian(speciation_rate_global_scale,weight=5.0) )
-moves.append( mvScaleBactrian(extinction_rate_global_scale,weight=5.0) )
-moves.append( mvScaleBactrian(fossilization_rate_global_scale,weight=5.0) )
+if (NUM_INTERVALS <= 25) {
+  speciation_rate_global_scale <- 0.0717
+  extinction_rate_global_scale <- 0.0717
+  fossilization_rate_global_scale <- 0.0717
+} else if (NUM_INTERVALS >= 75) {
+  speciation_rate_global_scale <- 0.158
+  extinction_rate_global_scale <- 0.158
+  fossilization_rate_global_scale <- 0.158
+}
 
 for (i in 1:(NUM_INTERVALS-1)) {
 
   # non-centralized parameterization of horseshoe
-  delta_log_speciation_rate[i] ~ dnNormal( mean=0, sd=speciation_rate_global_scale*speciation_rate_global_scale_hyperprior )
-  delta_log_extinction_rate[i] ~ dnNormal( mean=0, sd=extinction_rate_global_scale*extinction_rate_global_scale_hyperprior )
-  delta_log_fossilization_rate[i] ~ dnNormal( mean=0, sd=fossilization_rate_global_scale*fossilization_rate_global_scale_hyperprior )
+  delta_log_speciation_rate[i] ~ dnNormal( mean=0, sd=speciation_rate_global_scale )
+  delta_log_extinction_rate[i] ~ dnNormal( mean=0, sd=extinction_rate_global_scale )
+  delta_log_fossilization_rate[i] ~ dnNormal( mean=0, sd=fossilization_rate_global_scale )
 
   # Make sure values initialize to something reasonable
   delta_log_speciation_rate[i].setValue(runif(1,-0.1,0.1)[1])
@@ -88,11 +86,6 @@ fossilization_rate := fnassembleContinuousMRF(fossilization_rate_at_present,delt
 moves.append( mvEllipticalSliceSamplingSimple(delta_log_speciation_rate,weight=5,tune=FALSE) )
 moves.append( mvEllipticalSliceSamplingSimple(delta_log_extinction_rate,weight=5,tune=FALSE) )
 moves.append( mvEllipticalSliceSamplingSimple(delta_log_fossilization_rate,weight=5,tune=FALSE) )
-
-# Move all field hyperparameters in one go
-moves.append( mvGMRFHyperpriorGibbs(speciation_rate_global_scale, delta_log_speciation_rate, speciation_rate_global_scale_hyperprior, weight=5) )
-moves.append( mvGMRFHyperpriorGibbs(extinction_rate_global_scale, delta_log_extinction_rate, extinction_rate_global_scale_hyperprior, weight=5) )
-moves.append( mvGMRFHyperpriorGibbs(fossilization_rate_global_scale, delta_log_fossilization_rate, fossilization_rate_global_scale_hyperprior, weight=5) )
 
 # joint sliding moves of all vector elements
 moves.append( mvVectorSlide(delta_log_speciation_rate, weight=10) )
