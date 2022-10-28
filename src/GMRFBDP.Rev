@@ -101,9 +101,9 @@ rates_up_down_move.addVariable(delta_log_extinction_rate,TRUE)
 moves.append( rates_up_down_move )
 
 # shrink expand moves
-moves.append( mvShrinkExpand( delta_log_speciation_rate, sd=speciation_rate_global_scale, weight=10 ) )
-moves.append( mvShrinkExpand( delta_log_extinction_rate, sd=extinction_rate_global_scale, weight=10 ) )
-moves.append( mvShrinkExpand( delta_log_fossilization_rate, sd=fossilization_rate_global_scale, weight=10 ) )
+moves.append( mvShrinkExpand( delta_log_speciation_rate, weight=10 ) )
+moves.append( mvShrinkExpand( delta_log_extinction_rate, weight=10 ) )
+moves.append( mvShrinkExpand( delta_log_fossilization_rate, weight=10 ) )
 
 
 
