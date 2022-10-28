@@ -40,7 +40,7 @@ seed(SEED)
 CONDITION = "time"
 
 # set number of speciation_rate regimes (only used for MRF models)
-NUM_INTERVALS = 50
+NUM_INTERVALS = 100
 
 # number of breaks between regimes, for convenience (only used for MRF models)
 NUM_BREAKS = NUM_INTERVALS - 1
