@@ -154,8 +154,10 @@ if ( age_uncertainty == "both" || age_uncertainty == "tip" ) {
     F[i] ~ dnUniform(t[i] - b_i, t[i] - a_i)
     F[i] ~ dnSoftBoundUniformNormal(min=t[i] - b_i, max=t[i] - a_i, sd=2.0, p=0.01)
     F[i].clamp( 0 )
+    moves.append( mvFossilTipTimeUniform(timetree, root_height, min=a_i, max=b_i, weight=2) )
+    moves.append( mvFossilTipTimeSlideUniform(timetree, root_height, min=a_i, max=b_i, tune=true, weight=3) )
   }
-  moves.append( mvFossilTimeSlideUniform(timetree, root_height, weight=2*num_species) )
+#  moves.append( mvFossilTimeSlideUniform(timetree, root_height, weight=2*num_species) )
 }
 
 
