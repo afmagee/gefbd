@@ -63,13 +63,13 @@ moves.append( mvScaleBactrian(fossilization_rate_global_scale,weight=5.0) )
 for (i in 1:(NUM_INTERVALS-1)) {
 
   # Variable-scaled variances for hierarchical horseshoe
-#  sigma_speciation_rate[i] ~ dnHalfCauchy(0,1)
-#  sigma_extinction_rate[i] ~ dnHalfCauchy(0,1)
-#  sigma_fossilization_rate[i] ~ dnHalfCauchy(0,1)
+  sigma_speciation_rate[i] ~ dnHalfCauchy(0,1)
+  sigma_extinction_rate[i] ~ dnHalfCauchy(0,1)
+  sigma_fossilization_rate[i] ~ dnHalfCauchy(0,1)
 
-  sigma_speciation_rate[i] ~ dnHalfNormal(0,1)
-  sigma_extinction_rate[i] ~ dnHalfNormal(0,1)
-  sigma_fossilization_rate[i] ~ dnHalfNormal(0,1)
+#  sigma_speciation_rate[i] ~ dnHalfNormal(0,1)
+#  sigma_extinction_rate[i] ~ dnHalfNormal(0,1)
+#  sigma_fossilization_rate[i] ~ dnHalfNormal(0,1)
 
   # Make sure values initialize to something reasonable
   sigma_speciation_rate[i].setValue(runif(1,0.005,0.1)[1])
