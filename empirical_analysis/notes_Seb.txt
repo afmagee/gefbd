@@ -8,8 +8,14 @@ scp empirical_analysis/*.sh shoehna@mplogin1.hpc.palmuc.org:/sto/hpcbayes/shoehn
 > sbatch empirical_analysis/2_convergence_CRBDP.sh
 > sbatch empirical_analysis/3_compute_hyperpriors.sh
 > bash empirical_analysis/4_run_EFBDP_HSMRF.sh
+>>> scp -r shoehna@mplogin1.hpc.palmuc.org:/sto/hpcbayes/shoehna/projects/gefbd/empirical_analysis/output_Stubbs_both empirical_analysis/
+scp -r shoehna@mplogin1.hpc.palmuc.org:/sto/hpcbayes/shoehna/projects/gefbd/empirical_analysis/output_Stubbs_none empirical_analysis/
+scp -r shoehna@mplogin1.hpc.palmuc.org:/sto/hpcbayes/shoehna/projects/gefbd/empirical_analysis/output_Wilberg_both empirical_analysis/
+scp -r shoehna@mplogin1.hpc.palmuc.org:/sto/hpcbayes/shoehna/projects/gefbd/empirical_analysis/output_Wilberg_none empirical_analysis/
+
 > sbatch empirical_analysis/5_convergence_assessment_EFBDP_HSMRF.sh
 > sbatch empirical_analysis/6_summarize_HSMRF.sh
+> bash empirical_analysis/7_plot_EFBDP_HSMRF.sh
 
 
 ##############
@@ -20,3 +26,4 @@ current -> 4
 
 
 scp 'shoehna@mplogin1.hpc.palmuc.org:/sto/hpcbayes/shoehna/projects/gefbd/empirical_analysis/output/*' empirical_analysis/output
+scp 'shoehna@mplogin1.hpc.palmuc.org:/sto/hpcbayes/shoehna/projects/gefbd/empirical_analysis/output_Stubbs_both/GMRF*' empirical_analysis/output_Stubbs_both
