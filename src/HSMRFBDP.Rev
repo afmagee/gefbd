@@ -108,14 +108,14 @@ extinction_rate := fnassembleContinuousMRF(extinction_rate_at_present,delta_log_
 fossilization_rate := fnassembleContinuousMRF(fossilization_rate_at_present,delta_log_fossilization_rate,initialValueIsLogScale=FALSE,order=1)
 
 # Move all field parameters in one go
-moves.append( mvEllipticalSliceSamplingSimple(delta_log_speciation_rate,weight=5,tune=FALSE) )
-moves.append( mvEllipticalSliceSamplingSimple(delta_log_extinction_rate,weight=5,tune=FALSE) )
-moves.append( mvEllipticalSliceSamplingSimple(delta_log_fossilization_rate,weight=5,tune=FALSE) )
+#moves.append( mvEllipticalSliceSamplingSimple(delta_log_speciation_rate,weight=5,tune=FALSE) )
+#moves.append( mvEllipticalSliceSamplingSimple(delta_log_extinction_rate,weight=5,tune=FALSE) )
+#moves.append( mvEllipticalSliceSamplingSimple(delta_log_fossilization_rate,weight=5,tune=FALSE) )
 
 # Move all field hyperparameters in one go
-moves.append( mvHSRFHyperpriorsGibbs(speciation_rate_global_scale, sigma_speciation_rate, delta_log_speciation_rate, speciation_rate_global_scale_hyperprior, propGlobalOnly=0.75, weight=20) )
-moves.append( mvHSRFHyperpriorsGibbs(extinction_rate_global_scale, sigma_extinction_rate, delta_log_extinction_rate, extinction_rate_global_scale_hyperprior, propGlobalOnly=0.75, weight=20) )
-moves.append( mvHSRFHyperpriorsGibbs(fossilization_rate_global_scale, sigma_fossilization_rate, delta_log_fossilization_rate, fossilization_rate_global_scale_hyperprior, propGlobalOnly=0.75, weight=20) )
+#moves.append( mvHSRFHyperpriorsGibbs(speciation_rate_global_scale, sigma_speciation_rate, delta_log_speciation_rate, speciation_rate_global_scale_hyperprior, propGlobalOnly=0.75, weight=20) )
+#moves.append( mvHSRFHyperpriorsGibbs(extinction_rate_global_scale, sigma_extinction_rate, delta_log_extinction_rate, extinction_rate_global_scale_hyperprior, propGlobalOnly=0.75, weight=20) )
+#moves.append( mvHSRFHyperpriorsGibbs(fossilization_rate_global_scale, sigma_fossilization_rate, delta_log_fossilization_rate, fossilization_rate_global_scale_hyperprior, propGlobalOnly=0.75, weight=20) )
 
 # Swap moves to exchange adjacent delta,sigma pairs
 moves.append( mvHSRFIntervalSwap(delta_log_speciation_rate,sigma_speciation_rate,weight=5) )
