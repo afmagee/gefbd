@@ -18,7 +18,7 @@ this.ME     = args[5]
 
 grid.times <- computeGridEndTimes(100,243.5)
 #grid.times <- computeGridEndTimes(10,248.9)
-#grid.times <- computeGridEndTimes(10,243.5)
+#grid.times <- computeGridEndTimes(50,243.5)
 
 ## Create figures directory
 dir.create(FIGURES_DIR, showWarnings=FALSE)

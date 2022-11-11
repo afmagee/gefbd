@@ -17,6 +17,7 @@ cat(FIGURES_DIR,"\n")
 
 grid.times <- computeGridEndTimes(100,243.5)
 #grid.times <- computeGridEndTimes(10,248.9)
+grid.times <- computeGridEndTimes(50,243.5)
 
 # Get names of datasets
 #ds.names <- list.files("data/")

@@ -19,4 +19,5 @@ current -> 4
 ##############
 
 
-scp 'shoehna@mplogin1.hpc.palmuc.org:/sto/hpcbayes/shoehna/projects/gefbd/empirical_analysis/output/*' empirical_analysis/output
+scp 'shoehna@mplogin1.hpc.palmuc.org:/sto/hpcbayes/shoehna/projects/gefbd/empirical_analysis/output_Stubbs_both/*' empirical_analysis/output_Stubbs_both
+scp 'shoehna@mplogin1.hpc.palmuc.org:/sto/hpcbayes/shoehna/projects/gefbd/empirical_analysis/output_Stubbs_both/GMRF*' empirical_analysis/output_Stubbs_both
