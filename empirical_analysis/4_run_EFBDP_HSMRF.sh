@@ -1,6 +1,6 @@
 #!/bin/bash
 
-N_CORES=16
+N_CORES=8
 JOB_DIR="empirical_analysis/jobs_HSMRF"
 LOG_DIR="empirical_analysis/logs_HSMRF"
 exec=rb-mpi-coal
@@ -22,13 +22,16 @@ if [ ${LOG_DIR} != "" ]; then
 fi
 
 
-for me_prior in "0.0" "0.5" "2.0";
+#for me_prior in "0.0" "0.5" "2.0";
+for me_prior in "0.5";
 do
 
-    for uncertainty in "none" "both";
+#    for uncertainty in "none" "both";
+    for uncertainty in "both";
     do
 
-        for ds in "Wilberg" "Stubbs";
+#        for ds in "Wilberg" "Stubbs";
+        for ds in "Stubbs";
         do
 
             echo "#!/bin/bash
@@ -38,8 +41,8 @@ do
 #SBATCH --ntasks=${N_CORES}
 #SBATCH --nodes=1
 #SBATCH --mem=${N_CORES}G
-#SBATCH --qos=low_prio_long
-#SBATCH --time=180-00:00:00
+#SBATCH --qos=high_prio
+#SBATCH --time=7-00:00:00
 
 module load gnu
 module load boost
