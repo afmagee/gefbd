@@ -1,6 +1,8 @@
 #!/bin/bash
 
-N_CORES=8
+N_CORES=32
+N_REPS=8
+N_CHAINS=4
 JOB_DIR="empirical_analysis/jobs_HSMRF"
 LOG_DIR="empirical_analysis/logs_HSMRF"
 exec=rb-mpi-coal
@@ -49,7 +51,7 @@ module load boost
 module load openmpi
 
 # <path/to/rb> analysis_age_uncertainty.Rev --args <treefile> <TAXON_FILE> <BDP_prior> <hyperprior_file> <ME_hyperprior> <treatement_probability> <age_uncertainty> <NUM_REPS> <seed> <OUTPUT_DIR>
-mpirun -np ${N_CORES} ${exec} src/analysis_age_uncertainty.Rev --args ${ds}.tre crocs_taxa_range_${ds}.tsv HSMRFBDP ${ds}.priors.txt ${me_prior} 0.5 ${uncertainty} ${N_CORES} 1234 empirical_analysis/output_${ds}_${uncertainty} > ${LOG_DIR}/${ds}_${uncertainty}_${me_prior}.out
+mpirun -np ${N_CORES} ${exec} src/analysis_age_uncertainty.Rev --args ${ds}.tre crocs_taxa_range_${ds}.tsv HSMRFBDP ${ds}.priors.txt ${me_prior} 0.5 ${uncertainty} ${N_REPS} ${N_CHAINS} 1234 empirical_analysis/output_${ds}_${uncertainty} > ${LOG_DIR}/${ds}_${uncertainty}_${me_prior}.out
 " > ${JOB_DIR}/${ds}_${uncertainty}_${me_prior}.sh
             sbatch ${JOB_DIR}/${ds}_${uncertainty}_${me_prior}.sh
 

@@ -28,11 +28,14 @@ age_uncertainty <- args[7]
 # Number of MCMC replicates
 NUM_REPS = args[8]
 
+# Number of MCMCMC chain
+NUM_CHAINS = args[9]
+
 # For reproducibility
-SEED = args[9]
+SEED = args[10]
 
 # The output directory
-OUTPUT_DIR = args[10]
+OUTPUT_DIR = args[11]
 
 seed(SEED)
 
@@ -187,7 +190,7 @@ monitors.append( mnScreen(printgen=10) )
 ##########
 
 ### workspace mcmc ###
-mymcmc = mcmc(mymodel, monitors, moves, nruns=NUM_REPS)
+mymcmc = mcmcmc(mymodel, monitors, moves, nruns=NUM_REPS, nchains=NUM_CHAINS, tuneHeat=TRUE, swapInterval=1)
 
 ### Use burnin to tune the MH proposals ###
 mymcmc.burnin(generations=1000, tuningInterval=100)
