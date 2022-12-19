@@ -9,6 +9,7 @@ if (NUM_EXPECTED_ME > 0.0) {
     moves.append( mvRJSwitch(mass_extinction_probabilities[i], weight=3) )
     moves.append( mvSlideBactrian(mass_extinction_probabilities[i], weight=3) )
   }
+  movea.append( mvVectorElementSwap(mass_extinction_probabilities, neighborsOnly=TRUE, weight=NUM_INTERVALS) )
 } else {
   # No mass extinctions
   mass_extinction_probabilities <- rep(0,NUM_BREAKS)

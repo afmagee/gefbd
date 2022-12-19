@@ -43,8 +43,8 @@ do
 #SBATCH --ntasks=${N_CORES}
 #SBATCH --nodes=1
 #SBATCH --mem=${N_CORES}G
-#SBATCH --qos=high_prio
-#SBATCH --time=7-00:00:00
+#SBATCH --qos=normal_prio
+#SBATCH --time=28-00:00:00
 
 module load gnu
 module load boost
