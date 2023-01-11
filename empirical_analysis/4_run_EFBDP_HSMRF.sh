@@ -1,8 +1,8 @@
 #!/bin/bash
 
-N_CORES=32
+N_CORES=8
 N_REPS=8
-N_CHAINS=4
+N_CHAINS=1
 JOB_DIR="empirical_analysis/jobs_HSMRF"
 LOG_DIR="empirical_analysis/logs_HSMRF"
 exec=rb-mpi-coal
